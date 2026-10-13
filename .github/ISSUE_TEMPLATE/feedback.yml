@@ -1,0 +1,32 @@
+name: 体験への意見
+description: ORBIT LABの試作を触った感想や改善案
+title: "[意見] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        企画検討用の試作です。個人情報や実際の願いごとは書かないでください。
+  - type: textarea
+    id: understanding
+    attributes:
+      label: 何をするか分かったか
+      description: 体験名と、分かったこと／迷ったことを教えてください。
+    validations:
+      required: true
+  - type: textarea
+    id: enjoyment
+    attributes:
+      label: 面白かった／退屈だった点
+    validations:
+      required: true
+  - type: textarea
+    id: changes
+    attributes:
+      label: 変えたいこと
+  - type: textarea
+    id: device
+    attributes:
+      label: 端末・ブラウザ
+      description: 分かる範囲で、スマホ／PC、機種、ブラウザ名を教えてください。
+    validations:
+      required: true
