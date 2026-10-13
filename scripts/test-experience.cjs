@@ -1,0 +1,18 @@
+const assert=require('node:assert/strict');
+const {framing,capture,nextPhase}=require('../experience-core.js');
+let checks=0;function test(name,fn){fn();checks++;console.log('PASS '+name);}
+const first=capture({x:0,y:0}),second=capture({x:55,y:-20});
+test('different compositions change image content',()=>assert.notEqual(first.src,second.src));
+test('selected geometry is in the actual SVG',()=>assert(decodeURIComponent(second.src).includes('translate(215 74)')));
+test('capture is isolated from later changes',()=>{const frame={x:12,y:8},photo=capture(frame);frame.x=-90;assert.equal(photo.frame.x,12);assert(Object.isFrozen(photo)&&Object.isFrozen(photo.frame));});
+test('non-finite input stays valid',()=>assert.deepEqual(framing({x:Infinity,y:NaN}),{x:0,y:0}));
+test('out of range drags stay bounded',()=>assert.deepEqual(framing({x:999,y:-999}),{x:90,y:-55}));
+test('repeat send cannot retransmit',()=>assert.equal(nextPhase('sending','send'),'sending'));
+test('repeat attach cannot restart',()=>assert.equal(nextPhase('attaching','attach'),'attaching'));
+test('sending before a capture is rejected',()=>assert.equal(nextPhase('frame','send'),'frame'));
+test('late shutter cannot overwrite a received image',()=>assert.equal(nextPhase('complete','capture'),'complete'));
+test('skip and animation finish reach the same result',()=>assert.equal(nextPhase('sending','skip'),nextPhase('sending','finish')));
+test('retake starts framing',()=>assert.equal(nextPhase('complete','retake'),'frame'));
+test('prototype property names are not transitions',()=>assert.equal(nextPhase('__proto__','toString'),'__proto__'));
+test('images have no external resource dependencies',()=>{for(const photo of [first,second]){assert(photo.src.startsWith('data:image/svg+xml;'));assert(!/https?:\/\//.test(decodeURIComponent(photo.src).replace('http://www.w3.org/2000/svg','')));}});
+console.log(`${checks} scenarios passed`);
