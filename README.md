@@ -4,7 +4,7 @@
 
 ## 試す
 
-- 公開先: https://mastom-toki.github.io/rymansat-orbit-lab/ （初回デプロイの動作確認待ち）
+- 公開先: https://mastom-toki.github.io/rymansat-orbit-lab/
 - リポジトリ: https://github.com/mastom-toki/rymansat-orbit-lab
 - 体験: 衛星ミッションメーカー / 宇宙ポスト・お願いごとの旅
 
@@ -43,4 +43,4 @@ python -m http.server 8000 --bind 127.0.0.1
 
 説明の出典は [宇宙ポスト公式案内](https://www.rymansat.com/spacepost) と [参加案内](https://www.rymansat.com/join) です。図版は説明用の独自図案で、公式ロゴ・実機写真ではありません。展示への採用と説明内容は、今後メンバーで確認します。
 
-移管前HTMLの過去のテスト結果は、今回の公開版の検証結果として転載していません。公開後の検証結果は `docs/verification.md` に記録します。実機iPhone・Android、会場回線、分かりやすさ・面白さは未検証です。
+移管前HTMLの過去のテスト結果は、今回の公開版の検証結果として転載していません。初回公開の検証結果は [docs/verification.md](docs/verification.md) に記録しています。実機iPhone・Android、会場回線、分かりやすさ・面白さは未検証です。
