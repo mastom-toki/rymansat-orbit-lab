@@ -41,7 +41,7 @@ python -m http.server 8000 --bind 127.0.0.1
 node scripts/test-experience.cjs
 ```
 
-画像生成と進行の自動確認です。画面・操作の確認結果は[検証記録](docs/verification.md)、実機確認は[約3分のチェックリスト](docs/device-checklist.md)を参照してください。ブランチの改修は、承認後にmainへ取り込み、Pagesで公開されます。
+画像生成・進行・連打のガード・スキップ後のフォーカスを計20シナリオで確認します。動き低減中に連打で章が飛ぶ問題と、スキップ後にキーボードのフォーカスが失われる問題を修正しています。画面・操作の確認結果は[検証記録](docs/verification.md)、実機確認は[約3分のチェックリスト](docs/device-checklist.md)を参照してください。ブランチの改修は、承認後にmainへ取り込み、Pagesで公開されます。
 
 ## 意見と共同開発
 
