@@ -15,6 +15,10 @@
  }
  const transitions={attach:{attach:'attaching'},attaching:{finish:'frame',skip:'frame'},frame:{capture:'review'},review:{send:'sending',retake:'frame'},sending:{finish:'complete',skip:'complete'},complete:{retake:'frame'}};
  function nextPhase(phase,event){return Object.hasOwn(transitions,phase)&&Object.hasOwn(transitions[phase],event)?transitions[phase][event]:phase;}
- root.OrbitPhoto=Object.freeze({framing,photoSvg,capture,nextPhase});
+ function primaryActionGate(interval=350){
+  let last=-Infinity;
+  return Object.freeze({accept(now){if(!Number.isFinite(now)||now-last<interval)return false;last=now;return true;},reset(){last=-Infinity;}});
+ }
+ root.OrbitPhoto=Object.freeze({framing,photoSvg,capture,nextPhase,primaryActionGate});
  if(typeof module==='object'&&module.exports)module.exports=root.OrbitPhoto;
 })(typeof globalThis!=='undefined'?globalThis:this);

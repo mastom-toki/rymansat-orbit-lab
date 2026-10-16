@@ -185,7 +185,7 @@ function render(keepFocus=null){
 function go(page,hash=true){
  clearTimeout(toastTimer);document.getElementById('toast').hidden=true;
  if(!routes.includes(page))page='home';
- clearFlight();cancelExperience();
+ clearFlight();cancelExperience();experienceInputGate.reset();
  state.page=page;
  if(page==='mission'){state.course='guided';photoMission=freshPhotoMission();state.mstep='choose';state.missionId=null;state.parts=new Set();state.flightRecorded=false;state.flightResult=null;}
  if(page==='post'){state.postStage=-1;state.quizAnswer=null;state.postRecorded=false;}
@@ -219,6 +219,7 @@ function action(name){switch(name){
 }}
 document.addEventListener('click',event=>{
  const b=event.target.closest('button');if(!b||b.disabled)return;
+ if(b.matches('.primary-action')&&!experienceInputGate.accept(event.timeStamp))return;
  if(b.dataset.go){go(b.dataset.go);return;}
  if(b.dataset.exp){experienceAction(b.dataset.exp);return;}
  if(b.dataset.mission){state.course='advanced';state.missionId=b.dataset.mission;state.parts=new Set();state.mstep='build';state.flightRecorded=false;state.flightResult=null;render();return;}

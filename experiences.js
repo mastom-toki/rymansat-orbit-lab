@@ -1,5 +1,6 @@
 /* Recommended photo mission and continuous, browser-local wish-card journey. */
 'use strict';
+const experienceInputGate=OrbitPhoto.primaryActionGate(350);
 let photoMission,postMotion=null,experienceTimer=null,experienceGeneration=0,frameDrag=null;
 function freshPhotoMission(){return {phase:'attach',camera:false,frame:{x:0,y:0},photo:null,groundSrc:null,recorded:false};}
 photoMission=freshPhotoMission();
@@ -93,9 +94,10 @@ function advanceJourney(back=false){
 
 function finishPostMotion(){
  if(state.page!=='post')return;postMotion=null;
+ const skip=main.querySelector('[data-exp="skip-post-motion"]'),restoreFocus=skip&&document.activeElement===skip;
  main.querySelectorAll('.scan-motion,.load-motion').forEach(el=>el.classList.remove('scan-motion','load-motion'));
- main.querySelector('.scan-line')?.remove();main.querySelector('[data-exp="skip-post-motion"]')?.remove();
- const next=main.querySelector('[data-action="journey-next"]');if(next)next.disabled=false;
+ main.querySelector('.scan-line')?.remove();skip?.remove();
+ const next=main.querySelector('[data-action="journey-next"]');if(next){next.disabled=false;if(restoreFocus)next.focus({preventScroll:true});}
 }
 function wishCard(kind='paper'){
  return `<div class="continuity-card" data-card-id="wish-${state.wishIndex}" data-card-kind="${kind}" aria-label="${kind==='paper'?'紙':'同じ願いの画像'}：${esc(WISHES[state.wishIndex])}"><span class="card-address">宇宙ポスト / 体験用カード</span><span class="card-stamp">${icon('satellite',16)}</span><p>${esc(WISHES[state.wishIndex])}</p></div>`;
