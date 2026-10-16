@@ -58,3 +58,15 @@ node scripts/test-experience.cjs
 説明の出典は [宇宙ポスト公式案内](https://www.rymansat.com/spacepost) と [参加案内](https://www.rymansat.com/join) です。図版は説明用の独自図案で、公式ロゴ・実機写真ではありません。展示への採用と説明内容は、今後メンバーで確認します。
 
 移管前HTMLの過去のテスト結果は、今回の公開版の検証結果として転載していません。初回公開と体験改善の検証結果は [docs/verification.md](docs/verification.md) に記録しています。実機iPhone・Android、会場回線、分かりやすさ・面白さは未検証です。
+
+## 画像データの旅：アニメーションのレビュー版
+
+PR #1の体験改善は承認後にmainへマージし、公開URLで両体験を確認しました。公開対象commitと戻す版は[検証記録](docs/verification.md)を参照してください。
+
+別ブランチの[8工程アニメーション](animations/spacepost-flow/deck.html)は、提供ポスターを参考にした40秒・無音の試作です。HTMLを直接開くか、ローカルHTTPサーバーの`/animations/spacepost-flow/deck.html`を開いてください。紙の原本を地上に残し、同じ画像データをSDカード、衛星、ロケット、周回、再突入へ動かします。画像・動画生成AIは使用していません。公開済みの体験への組み込みは別途レビューします。
+
+```powershell
+node scripts/test-spacepost-flow.cjs
+```
+
+構成と時刻表は[scenes.md](animations/spacepost-flow/scenes.md)。描画は`seek(t)`で再現でき、`?t=12.5`で任意時刻に停止します。単体HTMLにslide-hubのMotionランタイムを未改変で埋め込み、補間関数を使用しています。外部CDNは不要です。slide-hubでのMP4出力は`deck.json`と同じフォルダを指定し、`node export/export.mjs <deckの絶対パス> mp4 --workers 2 --sub 1 --out <出力フォルダ>`で行います。出力MP4はGitに含めず、レビュー用成果物として分けます。
