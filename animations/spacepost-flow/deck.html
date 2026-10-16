@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>宇宙ポスト：画像データの旅 | ORBIT LAB レビュー版</title>
+<style>
+:root{font-family:system-ui,"Yu Gothic",sans-serif;color:#142a44;background:#e6e8e5;color-scheme:light}*{box-sizing:border-box}body{margin:0}main{max-width:600px;margin:auto;padding:12px}.slide{position:relative;width:100%;aspect-ratio:3/4;overflow:hidden;background:#f5f4ed}#stage{width:1080px;height:1440px;position:absolute;transform-origin:top left;background:#f5f4ed}header{position:absolute;inset:58px 72px auto}.brand{font-size:26px;letter-spacing:.08em;font-weight:700}h1{font-size:66px;line-height:1.2;margin:20px 0 36px;letter-spacing:-.035em}.stephead{display:flex;align-items:center;gap:24px}#number{display:grid;place-items:center;background:#bc4728;color:#fff;border-radius:50%;width:72px;height:72px;font-size:44px;font-weight:800;flex-shrink:0}h2{font-size:44px;line-height:1.2;margin:0}#caption{font-size:34px;line-height:1.45;margin:16px 0 0;max-width:936px}#progress{display:flex;gap:15px;margin-top:22px}#progress span{display:grid;place-items:center;width:42px;height:42px;border:2px solid #77828a;border-radius:50%;font-size:23px;font-weight:700}#progress .done{background:#142a44;color:#fff;border-color:#142a44}#progress .current{background:#bc4728;color:#fff;border-color:#bc4728;outline:3px solid #bc4728;outline-offset:4px}canvas{position:absolute;top:365px;left:0;width:1080px;height:850px}.takeaway{position:absolute;left:72px;right:72px;top:1230px;border-top:3px solid #142a44;padding-top:25px;font-size:40px;font-weight:800;line-height:1.45}.takeaway em{color:#a9361b;font-style:normal}.disclaimer{position:absolute;left:72px;right:72px;bottom:36px;font-size:22px;line-height:1.5;margin:0}#hud{margin-top:12px;background:#fff;padding:16px}button,input{font:inherit}button{border:1px solid #8a959e;background:#fff;color:#142a44;min-height:44px;padding:8px 12px;cursor:pointer}button:disabled{opacity:.5;cursor:default}button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #bc4728;outline-offset:3px}#play{background:#142a44;color:#fff;border-color:#142a44}nav{display:flex;gap:8px;flex-wrap:wrap}input[type=range]{display:block;width:100%;height:36px;accent-color:#bc4728}#time{font-variant-numeric:tabular-nums;font-size:14px}#status{font-size:14px;margin:8px 0}details{background:#fff;padding:16px;margin-top:12px;font-size:14px;line-height:1.7}summary{cursor:pointer}a{color:#18517f}.note{font-size:13px;line-height:1.6;margin:12px 4px}.render main{display:block;max-width:none;margin:0;padding:0}.render .slide{width:100vw;height:100vh;aspect-ratio:auto}.render #hud,.render details,.render .note{display:none}.render{overflow:hidden}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}@media(min-width:800px){main{max-width:1040px;padding:20px;display:grid;grid-template-columns:minmax(0,600px) minmax(240px,1fr);gap:20px;align-items:start}.slide{grid-row:1/4}#hud{margin-top:0;position:sticky;top:20px}details{margin-top:0}.note{margin-top:0}}@media(max-width:380px){main{padding:8px}#hud{padding:10px}button{padding:7px 9px}}
+</style>
+<main>
+<section class="slide" aria-label="宇宙ポストの8工程を示す模式アニメーション">
+<div id="stage">
+<header><div class="brand">ORBIT LAB　／　企画検討用の試作・採用未定</div><h1>画像データの、宇宙への旅。</h1><div class="stephead"><span id="number">1</span><h2 id="scene-title">短冊に願いを書く</h2></div><p id="caption">例文の短冊を用意します。紙の原本は、地上に残ります。</p><div id="progress" aria-label="全8工程"></div></header>
+<canvas id="art" width="1080" height="850" role="img" aria-label="紙の原本を地上に残し、画像データ01が宇宙へ移動する模式図"></canvas>
+<div class="takeaway">宇宙へ行くのは、短冊の<em>画像データ</em>。</div>
+<p class="disclaimer">実際の宇宙ポスト受付ではありません。時間・距離・軌道は模式図です。<br>独自図案／流れの出典：リーマンサット・プロジェクト「宇宙ポスト」</p>
+</div></section>
+<div id="hud"><nav aria-label="アニメーションの操作"><button id="prev">前の工程</button><button id="play">再生</button><button id="next">次の工程</button><button id="restart">最初へ</button></nav><label for="scrub" class="sr">再生位置（秒）</label><input id="scrub" type="range" min="0" max="40" step="0.1" value="0"><output id="time" for="scrub">0.0 / 40.0秒</output><label style="display:block;margin-top:8px;font-size:14px"><input id="reduce" type="checkbox"> 動きを減らす（工程ごとの静止画）</label><p id="status" role="status" aria-live="polite">停止中。再生、または「次の工程」で進めます。</p></div>
+<details><summary>8工程を文章で読む・出典</summary><ol id="transcript"></ol><p>説明用の例文を使っています。撮影、受付、送信、実際の衛星への接続は行いません。SDカードや衛星の内部、ロケットの形、周回と再突入は、流れを伝えるための独自模式図です。</p><p><a href="https://www.rymansat.com/spacepost" target="_blank" rel="noopener">宇宙ポスト公式案内</a></p></details>
+<p class="note">レビュー版。無音・自動再生なし。矢印キーは工程送り、スペースは再生／停止（ボタン・スライダー操作中を除く）。動きを減らす設定では工程送りで確認できます。</p>
+</main>
+<script>
+/* @runtime:begin motion.js */
+/* slide-hub motion runtime。依存なし・1ファイル。window.Motion（Node では module.exports）に置く。
+   デッキの deck.html には tools/runtime-sync.mjs が @runtime:begin 〜 @runtime:end の間へ丸ごと埋め込む（手で書き換えない）。
+   抽出元: templates/explainer の template.html・vertical.html、lyric-9x16.html、decks/20260928-slide-hub-promo・-short・
+   -ai-call-guard-explainer の deck.html。同じ計算はここに 1 つだけ置き、元ごとに違った挙動はその場にコメントで残す。 */
+(function (root) {
+  "use strict";
+  const VERSION = "1.0.0";
+
+  // ---- 数 ----
+  const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+  const lerp = (a, b, k) => a + (b - a) * k;
+  // x を [a, b] → [c, d] に写す。既定で [c, d] に収める
+  const remap = (x, a, b, c = 0, d = 1, clip = true) => { const k = (x - a) / (b - a); return lerp(c, d, clip ? clamp(k) : k); };
+  // 区間 [a, b] での進み 0..1（promo / short の seg）
+  const seg = (t, a, b) => clamp((t - a) / (b - a));
+
+  // ---- easing（入力は 0..1。outExpo は元の explainer と同じく 0 未満を切らない）----
+  const ease = {
+    linear: x => x,
+    inQuad: x => x * x,
+    outQuad: x => 1 - (1 - x) * (1 - x),
+    inOutQuad: x => x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2,
+    inCubic: x => x * x * x,
+    outCubic: x => 1 - Math.pow(1 - x, 3),
+    inOutCubic: x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2, // promo の inOut
+    outExpo: x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x),
+    inOutExpo: x => x <= 0 ? 0 : x >= 1 ? 1 : x < 0.5 ? Math.pow(2, 20 * x - 10) / 2 : (2 - Math.pow(2, -20 * x + 10)) / 2,
+    outBack: x => 1 + 2.70158 * Math.pow(x - 1, 3) + 1.70158 * Math.pow(x - 1, 2),
+    bump: x => x <= 0 || x >= 1 ? 0 : Math.sin(Math.PI * x), // 0→1→0（promo の bump）
+  };
+
+  // ---- 閉形式スプリング ----
+  // 減衰振動のステップ応答 0→1（tau <= 0 は 0）。f = 固有振動数 Hz、z = 減衰比（< 1）。
+  // 既定値は元ごとに違った: explainer / ai-call-guard は (2.0, 0.8)、promo / short は (1.6, 0.8)、lyric は (2.4, 0.7)。
+  // ここの既定は (2.0, 0.8)。それ以外に頼っていたところは呼び出し側で明示する
+  function spring(tau, f = 2.0, z = 0.8) {
+    if (tau <= 0) return 0;
+    const w = 2 * Math.PI * f, wd = w * Math.sqrt(1 - z * z);
+    return 1 - Math.exp(-z * w * tau) * (Math.cos(wd * tau) + (z * w / wd) * Math.sin(wd * tau));
+  }
+  // 目標が変わるたびにバネを1本足す: v(t) = v0 + Σ (v_i − v_{i−1})・spring(t − t_i)。過去の状態を持たないので、どの t にも直接飛べる。
+  // keys = [[t, v, f?, z?], ...]。v は数か同じ長さの配列。keys[0] の t は使わない（初期値）。f / z はキーごとに上書きできる
+  // （promo の track(keys, t, f, z) と explainer の形のキー K を 1 つにした）
+  function track(keys, t, f = 2.0, z = 0.8) {
+    const v0 = keys[0][1];
+    if (typeof v0 === "number") {
+      let v = v0;
+      for (let i = 1; i < keys.length; i++) {
+        const p = spring(t - keys[i][0], keys[i][2] ?? f, keys[i][3] ?? z);
+        if (p) v += (keys[i][1] - keys[i - 1][1]) * p;
+      }
+      return v;
+    }
+    const v = v0.slice();
+    for (let i = 1; i < keys.length; i++) {
+      const p = spring(t - keys[i][0], keys[i][2] ?? f, keys[i][3] ?? z);
+      if (p) for (let j = 0; j < v.length; j++) v[j] += (keys[i][1][j] - keys[i - 1][1][j]) * p;
+    }
+    return v;
+  }
+
+  // ---- 決まった乱数 ----
+  // mulberry32（promo / short の rng(seed) と同じ式）
+  function mulberry32(a) {
+    return () => {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      let t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  // 文字列 → 32bit（FNV-1a）
+  function hash(s) {
+    let h = 0x811c9dc5;
+    for (const ch of String(s)) { h ^= ch.codePointAt(0); h = Math.imul(h, 0x01000193); }
+    return h >>> 0;
+  }
+  // 物体ごとの系列: 同じ (id, seed) なら毎回同じ列、id が違えば独立した列
+  const rng = (id, seed = 0) => mulberry32(hash(id) ^ seed);
+  // 系列の i 番目だけを状態なしで引く（seek の中で使う）
+  const rand = (id, i = 0, seed = 0) => mulberry32((hash(id) ^ seed) + Math.imul(i + 1, 0x9E3779B1) | 0)();
+
+  // ---- シーン表 ----
+  // list = [{id, start?, dur}]。start を省くと前のシーンの終わりから続ける。at(t) → {scene, index, local, p}。
+  // 境界ちょうどの t は新しいシーンに入る。t < 0 は最初のシーンの頭、総尺以降は最後のシーンの末尾（p = 1）
+  function scenes(list) {
+    let t0 = 0;
+    const S = list.map((s, i) => {
+      const start = s.start ?? t0, dur = +s.dur;
+      if (!(dur > 0)) throw new Error(`scene ${s.id ?? i}: dur が正の数でない（${s.dur}）`);
+      t0 = start + dur;
+      return { ...s, id: String(s.id ?? i), index: i, start, dur, end: start + dur };
+    });
+    const total = S.reduce((m, s) => Math.max(m, s.end), 0);
+    function at(t) {
+      if (!S.length) return null;
+      let i = 0;
+      while (i + 1 < S.length && S[i + 1].start <= t) i++;
+      const s = S[i], local = clamp(t - s.start, 0, s.dur);
+      return { scene: s, index: i, local, p: local / s.dur };
+    }
+    return { list: S, total, at };
+  }
+
+  // ---- 拍グリッド（テンポ一定・offset = 最初の拍の時刻）----
+  // at(t) → {beat: 拍の実数, index: 拍番号, phase: 拍内 0..1, since: 拍頭からの秒, bar, inBar: 小節内の拍 0..perBar−1, barPhase: 小節内 0..1}
+  // t < offset は負の拍・負の小節（inBar は 0..perBar−1 のまま）
+  function beatGrid({ bpm, offset = 0, perBar = 4 }) {
+    const beat = 60 / bpm;
+    return {
+      beat, bar: beat * perBar,
+      time: k => offset + k * beat, // k 拍目の時刻
+      at(t) {
+        const b = (t - offset) / beat, index = Math.floor(b + 1e-9), bar = Math.floor(index / perBar);
+        const phase = clamp(b - index);
+        return { beat: b, index, phase, since: phase * beat, bar, inBar: index - bar * perBar, barPhase: (b - bar * perBar) / perBar };
+      },
+    };
+  }
+  // 昇順の配列 a で t 以下の要素数（lyric の upto。解析した拍・キック時刻の検索に使う）
+  function upto(a, t) {
+    let lo = 0, hi = a.length;
+    while (lo < hi) { const m = (lo + hi) >> 1; if (a[m] <= t) lo = m + 1; else hi = m; }
+    return lo;
+  }
+
+  // ---- 字幕の切り替え ----
+  // segs = [{t0, t1, ...}]（絶対秒）。join 秒未満の隙間で続く字幕は 1 本の帯（run）にまとめる（explainer は 1e-6、ai-call-guard は 0.35）。
+  // hold > 0 なら、次の字幕までの隙間が hold 秒以下のとき前の字幕をそこまで延ばす（vertical の「次のスライドの最初の字幕まで延ばす」）。
+  // roll: 次の字幕が直後に続くか（vertical は前が上へ抜けるのと同時に次が下から入る）
+  function captions(segs, { join = 1e-6, hold = 0 } = {}) {
+    const S = segs.map(g => ({ ...g })).sort((a, b) => a.t0 - b.t0);
+    S.forEach((g, i) => {
+      const nx = S[i + 1];
+      if (nx && hold > 0 && nx.t0 > g.t1 && nx.t0 - g.t1 <= hold) g.t1 = nx.t0;
+      g.roll = !!nx && Math.abs(nx.t0 - g.t1) < 1e-6;
+    });
+    const runs = [];
+    S.forEach(g => {
+      const u = runs[runs.length - 1];
+      if (u && g.t0 - u.t1 < join) { u.t1 = Math.max(u.t1, g.t1); u.segs.push(g); } else runs.push({ t0: g.t0, t1: g.t1, segs: [g] });
+    });
+    const at = t => { let i = -1; S.forEach((g, k) => { if (t >= g.t0 && t < g.t1) i = k; }); return i < 0 ? null : { seg: S[i], index: i, local: t - S[i].t0 }; };
+    const runAt = t => runs.find(u => t >= u.t0 && t < u.t1) ?? null;
+    return { segs: S, runs, at, runAt };
+  }
+
+  // ---- 大きさと安全域 ----
+  function parseSize(s = "1920x1080") {
+    const m = /^(\d{3,4})x(\d{3,4})$/.exec(String(s));
+    if (!m) throw new Error(`size は "1920x1080" のような 幅x高さ: ${s}`);
+    return [+m[1], +m[2]];
+  }
+  // 文字の要（見出し・字幕）を置いてよい矩形 {x, y, w, h}。
+  // 縦（9:16）は SNS の UI を避ける: 上 12%（上部のタブ）・下 20%（説明文とボタン）・右 15%（いいね等の縦並び）・左 6%（short の値に左の余白を足した）。
+  // 横（16:9）はタイトルセーフ 5%
+  function safeArea(size = "1920x1080") {
+    const [W, H] = Array.isArray(size) ? size : parseSize(size);
+    const [l, t, r, b] = H > W ? [0.06, 0.12, 0.15, 0.20] : [0.05, 0.05, 0.05, 0.05];
+    const x = Math.round(W * l), y = Math.round(H * t);
+    return { x, y, w: Math.round(W * (1 - r)) - x, h: Math.round(H * (1 - b)) - y };
+  }
+
+  // ---- 文字を枠に収める ----
+  // items = [{el, size, maxW, maxH?, measure?, grp?, min?}]。el の font-size を size から縮めて maxW（と maxH）に収める。
+  // 幅は measure（既定 el）の offsetWidth で測る（explainer はマスク線 .ln に大きさを付け、中の span で測る）。
+  // grp が同じものは同じ倍率（code の全行など）。min（px）より小さくはしない。各 item に fit（倍率）を書き戻す
+  // display:none の中にあって測れない item は触らない（幅 0 を「収まっている」と取り違えて元の大きさへ戻さないように。測る間は呼び出し側で表示する）
+  function fitText(all) {
+    const items = all.filter(r => (r.measure || r.el).getClientRects().length);
+    items.forEach(r => { r.el.style.fontSize = r.size + "px"; });
+    const g = new Map();
+    items.forEach(r => {
+      const m = r.measure || r.el;
+      r.fit = Math.min(1, r.maxW / (m.offsetWidth || 1), r.maxH ? r.maxH / (m.offsetHeight || 1) : 1);
+      if (r.min) r.fit = Math.max(r.fit, Math.min(1, r.min / r.size));
+      if (r.grp != null) g.set(r.grp, Math.min(g.get(r.grp) ?? 1, r.fit));
+    });
+    items.forEach(r => { if (r.grp != null) r.fit = g.get(r.grp); r.el.style.fontSize = (r.size * r.fit).toFixed(2) + "px"; });
+    return all;
+  }
+  // 字幅の見積もり（全角 = 1、半角 = 0.56 em。vertical の em）
+  const em = t => [...String(t)].reduce((a, c) => a + (c.codePointAt(0) < 0x2000 ? 0.56 : 1), 0);
+  // 2 行に割る: 真ん中に近い読点・閉じ記号の後ろ、無ければ真ん中に近い単語の切れ目（ひらがな・閉じ記号・！？の前では割らない）。vertical の split2
+  function split2(txt) {
+    txt = String(txt);
+    const mid = txt.length / 2;
+    let cut = -1;
+    for (const m of txt.matchAll(/[、。，・）」]/g)) if (cut < 0 || Math.abs(m.index - mid) < Math.abs(cut - mid)) cut = m.index;
+    if (cut >= 0 && cut <= txt.length - 3 && Math.abs(cut - mid) <= txt.length / 4) return [txt.slice(0, cut + 1), txt.slice(cut + 1)];
+    let best = -1;
+    const words = typeof Intl !== "undefined" && Intl.Segmenter ? [...new Intl.Segmenter("ja", { granularity: "word" }).segment(txt)].map(s => s.index) : [];
+    for (const i of words)
+      // 数字の直後（「1 / 枚」のような数と助数詞の間）でも割らない（vertical からの追加）
+      if (i > 2 && !/[ぁ-ゟ、。，）」ー！？!?…]/.test(txt.slice(i).trimStart()[0]) && !/\d/.test(txt[i - 1]) && (best < 0 || Math.abs(i - mid) < Math.abs(best - mid))) best = i;
+    if (best < 0) best = cut >= 0 ? cut + 1 : Math.round(mid);   // 割れる所が無ければ、偏っていても読点の後ろ（無ければ真ん中）
+    return [txt.slice(0, best).trimEnd(), txt.slice(best).trimStart()];
+  }
+  // 幅 maxW（px）に size で収まらなければ 2 行に割る（8% までは縮めて 1 行のまま。残りのはみ出しは fitText で縮める）
+  const wrap = (txt, size, maxW) => em(txt) * size <= maxW * 1.08 ? [String(txt)] : split2(txt);
+
+  // 2 色の間の rgb() 文字列（a, b は [r, g, b]）
+  const mix = (a, b, p) => `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * p)).join(",")})`;
+
+  // ---- デッキの規約をまとめて満たす ----
+  // Motion.mount({duration, size, seek, objects?, scenes?, ready?, layout?, loop?, stage?})
+  //   seek(t): t（0..duration に丸めた秒）の絵を描く純関数。layout(): 測って組む（最初と、フォント・画像の準備後にもう一度）
+  //   objects(t): [{id, bbox:[x,y,w,h], ...}]。省くとステージ内の [data-obj] で見えている要素の矩形（ステージ座標）
+  //   scenes: [{id, start?, dur}]。ready: 追加で待つ Promise
+  // 公開するもの: window.seek / window.DUR / window.__renderReady / window.__getSceneState() / Motion.info（new-deck が deck.json に写す）。
+  // ?t=秒 で静止、無ければループ再生（explainer は剰余、vertical は丸めていた。ここは丸めて、ループはページ側の rAF だけが回す）。
+  // ?safe で安全域の外を塗る（short の QA 表示）
+  function mount(o) {
+    const doc = root.document, win = root;
+    const [W, H] = parseSize(o.size);
+    const dur = +o.duration;
+    if (!(dur > 0)) throw new Error(`Motion.mount: duration が正の数でない（${o.duration}）`);
+    const stage = o.stage || doc.getElementById("stage");
+    if (!stage) throw new Error("Motion.mount: #stage が無い");
+    const css = doc.createElement("style");
+    css.textContent = "html,body{margin:0;height:100%;overflow:hidden}.slide{width:100vw;height:100vh;display:block;position:relative}"
+      + `#stage{position:absolute;left:0;top:0;width:${W}px;height:${H}px;transform-origin:0 0;overflow:hidden}`;
+    doc.head.prepend(css);
+    const fit = () => {
+      const s = Math.min(win.innerWidth / W, win.innerHeight / H);
+      stage.style.transform = `translate(${(win.innerWidth - W * s) / 2}px,${(win.innerHeight - H * s) / 2}px) scale(${s})`;
+    };
+    win.addEventListener("resize", fit); fit();
+    const sc = o.scenes ? scenes(o.scenes) : null;
+    let lastT = 0;
+    const draw = t => { lastT = +t || 0; o.seek(clamp(lastT, 0, dur)); };
+    const r1 = n => Math.round(n * 10) / 10;
+    const autoObjects = () => {
+      const st = stage.getBoundingClientRect(), k = W / (st.width || W);
+      return [...stage.querySelectorAll("[data-obj]")].filter(e => {
+        if (!e.getClientRects().length) return false;
+        const cs = getComputedStyle(e);
+        return cs.visibility === "visible" && +cs.opacity > 0;
+      }).map(e => {
+        const b = e.getBoundingClientRect();
+        return { id: e.dataset.obj, bbox: [r1((b.left - st.left) * k), r1((b.top - st.top) * k), r1(b.width * k), r1(b.height * k)] };
+      }).filter(x => x.bbox[2] > 0 && x.bbox[3] > 0);
+    };
+    o.layout?.();
+    win.seek = draw;
+    win.DUR = dur;
+    Motion.info = { duration: dur, size: `${W}x${H}`, loop: !!o.loop, version: VERSION };
+    const imgs = [...stage.querySelectorAll("img")];
+    win.__renderReady = Promise.all([
+      doc.fonts ? doc.fonts.ready : null,
+      ...imgs.map(i => i.decode().catch(() => { throw new Error("画像を読めない: " + i.getAttribute("src")); })),
+      o.ready,
+    ]).then(() => { o.layout?.(); draw(lastT); });
+    win.__getSceneState = () => {
+      const t = clamp(lastT, 0, dur), cur = sc?.at(t);
+      return {
+        t: Math.round(t * 1000) / 1000,
+        scene: cur ? cur.scene.id : null,
+        scenes: sc ? sc.list.map(s => ({ id: s.id, start: s.start, dur: s.dur })) : [],
+        objects: o.objects ? o.objects(t) : autoObjects(),
+      };
+    };
+    // ponytail: window.CUES は出さない（export の check / review は CUES があるとそれを優先する。シーンの頭 +0.3 秒は文字の立ち上がり途中で
+    // 「要レビュー」に数えられ、review の境界は __getSceneState().scenes で足りる）。音付きデッキは mix.mjs の timeline.js が CUES を出す
+    const q = new URLSearchParams(win.location.search), fixed = q.get("t");
+    if (q.has("safe")) {
+      const a = safeArea([W, H]), shade = doc.createElement("div");
+      shade.style.cssText = `position:absolute;inset:0;pointer-events:none;z-index:99;box-sizing:border-box;border:solid rgba(255,0,200,.28);`
+        + `border-width:${a.y}px ${W - a.x - a.w}px ${H - a.y - a.h}px ${a.x}px`;
+      stage.appendChild(shade);
+    }
+    draw(fixed !== null ? +fixed || 0 : 0);
+    if (fixed === null) {
+      const t0 = performance.now();
+      (function loop(now) { fit(); draw(((now - t0) / 1000) % dur); requestAnimationFrame(loop); })(t0);
+    }
+    return { seek: draw, scenes: sc, W, H, stage };
+  }
+
+  const Motion = {
+    version: VERSION,
+    clamp, lerp, remap, seg, ease, spring, track,
+    mulberry32, hash, rng, rand,
+    scenes, beatGrid, upto, captions,
+    parseSize, safeArea, fitText, em, split2, wrap, mix,
+    mount, info: null,
+  };
+  if (typeof module === "object" && module.exports) module.exports = Motion;
+  else root.Motion = Motion;
+})(typeof window !== "undefined" ? window : globalThis);
+
+/* @runtime:end */
+</script>
+<script id="flow-model">
+(function(root){
+'use strict';
+const SCENES=[
+{start:0,end:4,previewAt:3.2,title:'短冊に願いを書く',caption:'例文の短冊を用意します。紙の原本は、地上に残ります。'},
+{start:4,end:9,previewAt:7.5,title:'短冊を写真にする',caption:'同じ願いの画像を複製。紙は机に残し、画像だけを運びます。'},
+{start:9,end:13,previewAt:12.5,title:'画像をSDカードへ',caption:'画像データ01を、SDカードに保存します。'},
+{start:13,end:17,previewAt:16.3,title:'SDカードを衛星へ',caption:'SDカードを中へ。同じ画像データ01が衛星に入りました。'},
+{start:17,end:22,previewAt:21.3,title:'ロケットで宇宙へ',caption:'画像を入れた衛星を、ロケットで宇宙へ運びます。'},
+{start:22,end:26,previewAt:25.5,title:'衛星を放出する',caption:'ロケットから衛星が離れます。画像も衛星と一緒です。'},
+{start:26,end:34,previewAt:31.5,title:'地球のまわりを回る',caption:'画像を載せたまま周回。だんだん地球に近づく模式図です。'},
+{start:34,end:40,previewAt:39.3,title:'大気圏に入り、光る',caption:'衛星が大気圏に入り、光って燃え尽きる様子を表しています。'}
+];
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const mix=(a,b,p)=>a+(b-a)*p;
+const ease=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+const seg=(t,a,b)=>ease(clamp((t-a)/(b-a)));
+function stateAt(value){
+ const t=clamp(Number.isFinite(Number(value))?Number(value):0,0,40);
+ const step=Math.min(7,SCENES.findIndex(s=>t<s.end)<0?7:SCENES.findIndex(s=>t<s.end));
+ let image={x:420,y:580,s:1,alpha:seg(t,4.5,6.4)};
+ let satellite={x:760,y:465,s:1,alpha:seg(t,12.8,14)};
+ let sd={x:740,y:580,s:1,alpha:seg(t,8.8,10)};
+ const load=seg(t,9.8,12); image.x=mix(420,740,load);image.s=mix(1,.55,load);
+ const insert=seg(t,13.8,16);sd.x=mix(740,760,insert);sd.y=mix(580,465,insert);sd.s=mix(1,.6,insert); image.x=sd.x;image.y=sd.y; image.s=mix(.55,.35,insert);
+ if(t<13.8){image.x=mix(420,740,load);image.y=580;image.s=mix(1,.55,load);}
+ if(t>=16){image.x=satellite.x;image.y=satellite.y;image.s=.35;sd.alpha=0;}
+ let rocket={x:760,y:485,s:1,alpha:seg(t,16.5,18),open:seg(t,22,24),flame:seg(t,18,19)};
+ const launch=seg(t,18,22);rocket.y=mix(485,270,launch);rocket.s=mix(1,.75,launch);
+ if(t>=17&&t<22){const pack=seg(t,17,18);satellite.x=rocket.x;satellite.y=mix(465,rocket.y-45*rocket.s,pack);satellite.s=mix(1,rocket.s*.35,pack);satellite.fold=pack;}
+ if(t>=22&&t<26){const p=seg(t,22,26);satellite.x=mix(760,645+270*Math.cos(-2.4),p);satellite.y=mix(236,395+210*Math.sin(-2.4),p);satellite.s=mix(.2625,.65,p);satellite.fold=1-seg(t,22.5,24.5);rocket.alpha=1-seg(t,24,26);}
+ if(t>=26){const p=clamp((t-26)/8),a=-2.4+p*Math.PI*3.3,r=mix(270,215,p);satellite.x=645+r*Math.cos(a);satellite.y=395+r*.78*Math.sin(a);satellite.s=.65;rocket.alpha=0;}
+ if(t>=34){const a=-2.4+Math.PI*3.3,p=seg(t,34,38.3);satellite.x=mix(645+215*Math.cos(a),820,p);satellite.y=mix(395+215*.78*Math.sin(a),550,p);satellite.alpha=1-seg(t,37,38.5);}
+ if(t>=16){image.x=satellite.x;image.y=satellite.y;image.s=satellite.s*.35;image.alpha=satellite.alpha;}
+ return{t,step,paper:{x:215,y:605,id:'paper-01',content:'地球を宇宙から見てみたい。'},image:{...image,id:'image-01',content:'地球を宇宙から見てみたい。'},sd,satellite,rocket,earth:seg(t,20,23),trail:seg(t,34,35)*(1-seg(t,37.5,39)),ended:t>=38.5};
+}
+root.OrbitFlow={SCENES,stateAt,duration:40};
+})(typeof window==='object'?window:globalThis);
+</script>
+<script>
+(function(){
+'use strict';
+const {SCENES,stateAt,duration}=OrbitFlow;
+const $=id=>document.getElementById(id), canvas=$('art'),ctx=canvas.getContext('2d');
+const C={ink:'#142a44',paper:'#fffdf5',red:'#bc4728',blue:'#23628c',pale:'#dce8e7',gold:'#d7a437',gray:'#526371'};
+let current=0,playing=false,frame=0,baseTime=0,baseClock=0,lastStep=-1;
+const fixed=new URLSearchParams(location.search).has('t');
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+$('reduce').checked=reduced.matches;
+if(fixed)document.documentElement.classList.add('render');
+SCENES.forEach((s,i)=>{const dot=document.createElement('span');dot.textContent=i+1;$('progress').append(dot);const li=document.createElement('li');li.textContent=s.title+'。'+s.caption;$('transcript').append(li);});
+function line(x1,y1,x2,y2,color=C.ink,width=4){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();}
+function text(str,x,y,size=28,color=C.ink,align='center'){ctx.fillStyle=color;ctx.font=`600 ${size}px system-ui,"Yu Gothic",sans-serif`;ctx.textAlign=align;ctx.fillText(str,x,y);}
+function path(points,fill,stroke=C.ink,width=4){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p));ctx.closePath();ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.stroke();}
+function star(x,y,r,color=C.gold){ctx.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5;ctx.lineTo(x+Math.cos(a)*(i%2?r*.45:r),y+Math.sin(a)*(i%2?r*.45:r));}ctx.closePath();ctx.fillStyle=color;ctx.fill();}
+function card(x,y,s,kind,alpha=1){ctx.save();ctx.globalAlpha=alpha;ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle=C.paper;ctx.strokeStyle=kind==='image'?C.red:C.ink;ctx.lineWidth=kind==='image'?6:3;ctx.fillRect(-68,-104,136,208);ctx.strokeRect(-68,-104,136,208);ctx.fillStyle=kind==='image'?C.red:C.ink;ctx.fillRect(-68,-104,136,30);text(kind==='image'?'画像 01':'紙の原本',0,-83,18,'#fff');star(0,-49,15);['地球を宇宙から','見てみたい。'].forEach((str,i)=>text(str,0,-2+i*29,19));text('01',0,80,23,kind==='image'?C.red:C.ink);ctx.restore();}
+function drawSD(o){if(o.alpha<=0)return;ctx.save();ctx.globalAlpha=o.alpha;ctx.translate(o.x,o.y);ctx.scale(o.s,o.s);path([[-94,-132],[60,-132],[94,-98],[94,132],[-94,132]],C.ink);for(let i=0;i<5;i++){ctx.fillStyle=C.gold;ctx.fillRect(-68+i*27,-118,16,30);}text('SD',0,-53,34,'#fff');ctx.fillStyle='#edf0eb';ctx.fillRect(-65,-30,130,138);ctx.restore();}
+function drawSatellite(o){if(o.alpha<=0)return;ctx.save();ctx.globalAlpha=o.alpha;ctx.translate(o.x,o.y);ctx.scale(o.s,o.s);for(const dir of[-1,1]){ctx.save();ctx.globalAlpha*=1-(o.fold||0);ctx.fillStyle=C.blue;ctx.strokeStyle=C.ink;ctx.lineWidth=5;ctx.fillRect(dir<0?-190:88,-72,102,144);ctx.strokeRect(dir<0?-190:88,-72,102,144);for(let n=1;n<4;n++)line(dir<0?-190:88,-72+n*36,dir<0?-88:190,-72+n*36,C.pale,2);line(dir<0?-139:139,-72,dir<0?-139:139,72,C.pale,2);ctx.restore();}ctx.fillStyle=C.gold;ctx.strokeStyle=C.ink;ctx.lineWidth=5;ctx.fillRect(-88,-98,176,196);ctx.strokeRect(-88,-98,176,196);ctx.fillStyle=C.paper;ctx.fillRect(-65,-76,130,152);line(45,-98,75,-145,C.ink,4);ctx.beginPath();ctx.arc(75,-145,8,0,Math.PI*2);ctx.fillStyle=C.red;ctx.fill();ctx.restore();}
+function drawRocket(o,t){if(o.alpha<=0)return;ctx.save();ctx.globalAlpha=o.alpha;ctx.translate(o.x,o.y);ctx.scale(o.s,o.s);if(t<22&&o.flame>0){const len=90+o.flame*65+Math.sin(t*8)*8;path([[-30,150],[0,150+len],[30,150]],'#d78c36','#d78c36');path([[-14,150],[0,150+len*.7],[14,150]],'#fff3b2','#fff3b2');}path([[-45,105],[-82,172],[-32,155]],C.red);path([[45,105],[82,172],[32,155]],C.red);ctx.fillStyle=C.paper;ctx.strokeStyle=C.ink;ctx.lineWidth=5;ctx.fillRect(-43,-60,86,215);ctx.strokeRect(-43,-60,86,215);ctx.fillStyle=C.red;ctx.fillRect(-43,72,86,26);const open=o.open*100;ctx.save();ctx.translate(-open,-open*.15);path([[-54,-50],[-52,-130],[0,-225],[0,-50]],C.pale);ctx.restore();ctx.save();ctx.translate(open,-open*.15);path([[0,-50],[0,-225],[52,-130],[54,-50]],C.pale);ctx.restore();ctx.restore();}
+function earth(alpha,t){if(alpha<=0)return;ctx.save();ctx.globalAlpha=alpha;ctx.translate(645,395);ctx.strokeStyle='#b8d8e5';ctx.lineWidth=15;ctx.beginPath();ctx.arc(0,0,201,0,Math.PI*2);ctx.stroke();ctx.fillStyle=C.blue;ctx.beginPath();ctx.arc(0,0,192,0,Math.PI*2);ctx.fill();ctx.save();ctx.beginPath();ctx.arc(0,0,192,0,Math.PI*2);ctx.clip();ctx.translate(Math.sin(t*.15)*12,0);path([[-144,-125],[-50,-157],[25,-105],[2,-35],[-70,-8],[-105,48],[-163,5]],'#abc8a4','#abc8a4');path([[20,16],[95,-5],[158,55],[125,102],[59,91],[24,150],[-6,88]],'#abc8a4','#abc8a4');ctx.strokeStyle='#f5f4ed';ctx.globalAlpha*=.6;ctx.lineWidth=10;ctx.beginPath();ctx.ellipse(-25,-30,130,35,-.2,0,Math.PI*1.1);ctx.stroke();ctx.restore();ctx.strokeStyle=C.ink;ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,192,0,Math.PI*2);ctx.stroke();ctx.restore();}
+function draw(s){
+ ctx.clearRect(0,0,1080,850);
+ // The desk and original paper remain at this coordinate throughout the journey.
+ ctx.fillStyle='#e5e2d5';ctx.fillRect(70,754,320,20);line(85,774,85,810,C.gray,4);line(375,774,375,810,C.gray,4);
+ card(s.paper.x,s.paper.y,1.3,'paper');text('地上に残る紙',215,805,30);
+ if(s.t<4){ctx.save();ctx.translate(300+Math.sin(s.t*3)*4,495+Math.sin(s.t*2)*7);ctx.rotate(.6);path([[-9,-85],[9,-85],[9,25],[0,45],[-9,25]],C.gold);ctx.restore();text('例文の願いを、紙に。',650,480,38);line(510,510,340,560,C.ink,3);}
+ if(s.t>=4&&s.t<9.8){const p=Motion.seg(s.t,4,9);ctx.save();ctx.translate(520,285);ctx.fillStyle=C.ink;ctx.fillRect(-100,-52,200,118);ctx.fillRect(-70,-77,72,30);ctx.fillStyle=C.paper;ctx.beginPath();ctx.arc(10,7,42,0,Math.PI*2);ctx.fill();ctx.fillStyle=C.blue;ctx.beginPath();ctx.arc(10,7,29,0,Math.PI*2);ctx.fill();ctx.restore();line(480,380,245,525,C.red,3);line(550,380,350,550,C.red,3);if(s.t<6.3){line(120,550+Math.sin(p*Math.PI)*120,250,550+Math.sin(p*Math.PI)*120,C.red,5);}text('撮影 → 画像の複製',610,730,28,C.red);}
+ earth(s.earth,s.t);
+ if(s.t>=25.3&&s.t<34.5){ctx.save();ctx.strokeStyle='#8ba5b3';ctx.setLineDash([10,12]);ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(645,395,270,211,0,0,Math.PI*2);ctx.stroke();ctx.restore();text('地球',645,665,27);}
+ drawSD(s.sd);drawRocket(s.rocket,s.t);drawSatellite(s.satellite);card(s.image.x,s.image.y,s.image.s,'image',s.image.alpha);
+ if(s.t>=9&&s.t<13.5){text('画像を保存',745,790,30,C.red);}
+ if(s.t>=13.5&&s.t<17){text('内部を透視した模式図',700,725,28);}
+ if(s.t>=17&&s.t<22){text('衛星と画像はロケットの中',690,730,27);}
+ if(s.t>=22&&s.t<26){text('画像01も、一緒に。',740,730,29,C.red);}
+ if(s.trail>0){ctx.save();ctx.globalAlpha=s.trail;const x=s.satellite.x,y=s.satellite.y;ctx.lineCap='round';line(x-180,y-90,x,y,'#d5a33c',24);line(x-115,y-55,x,y,C.red,12);star(x+8,y+4,32,C.red);ctx.restore();}
+ if(s.ended){text('画像を載せた衛星の旅は、おしまい。',610,730,29);}
+ if(s.t>=4){text('紙は、ここ。',215,420,30,C.gray);line(215,439,215,460,C.gray,3);}
+}
+function fit(){const box=document.querySelector('.slide');const scale=Math.min(box.clientWidth/1080,box.clientHeight/1440);$('stage').style.transform=`scale(${scale})`;$('stage').style.left=`${(box.clientWidth-1080*scale)/2}px`;$('stage').style.top=`${(box.clientHeight-1440*scale)/2}px`;}
+window.seek=function(value){const s=stateAt(value);current=s.t;draw(s);$('number').textContent=s.step+1;$('scene-title').textContent=SCENES[s.step].title;$('caption').textContent=SCENES[s.step].caption;[...$('progress').children].forEach((e,i)=>{e.className=i===s.step?'current':i<s.step?'done':'';if(i===s.step)e.setAttribute('aria-current','step');else e.removeAttribute('aria-current');});$('scrub').value=s.t;$('time').textContent=`${s.t.toFixed(1)} / 40.0秒`;$('prev').disabled=s.t===0;$('next').disabled=s.step===7;if($('next').disabled&&document.activeElement===$('next'))$('restart').focus();canvas.setAttribute('aria-label',`${s.step+1}工程目。${SCENES[s.step].caption} 紙の原本は地上の机に残っています。`);if(s.step!==lastStep){$('status').textContent=`${s.step+1}/8：${SCENES[s.step].title}。${playing?'再生中。':'停止中。'}`;lastStep=s.step;}return s;};
+function stop(){playing=false;cancelAnimationFrame(frame);$('play').textContent='再生';$('status').textContent=`停止中。${Math.floor(current)}秒、${SCENES[stateAt(current).step].title}。`;}
+function tick(clock){if(!playing)return;seek(baseTime+(clock-baseClock)/1000);if(current>=duration){stop();return;}frame=requestAnimationFrame(tick);}
+function play(){if(playing){stop();return;}if($('reduce').checked){stop();$('status').textContent='動きを減らす設定中です。「次の工程」か時間スライダーで確認できます。';return;}if(current>=duration)seek(0);playing=true;baseTime=current;baseClock=performance.now();$('play').textContent='一時停止';$('status').textContent='再生中。';frame=requestAnimationFrame(tick);}
+function move(dir){stop();const idx=stateAt(current).step;seek(SCENES[Math.max(0,Math.min(7,idx+dir))].previewAt);}
+$('play').onclick=play;$('prev').onclick=()=>move(-1);$('next').onclick=()=>move(1);$('restart').onclick=()=>{stop();seek(0);};$('scrub').oninput=e=>{stop();seek(e.target.value);};
+document.addEventListener('keydown',e=>{if(e.altKey||e.ctrlKey||e.metaKey||e.target.closest('input,button,a,summary'))return;if(e.code==='Space'){e.preventDefault();play();}else if(e.key==='ArrowRight'){e.preventDefault();move(1);}else if(e.key==='ArrowLeft'){e.preventDefault();move(-1);}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});$('reduce').addEventListener('change',()=>{if($('reduce').checked)stop();});reduced.addEventListener('change',()=>{$('reduce').checked=reduced.matches;if(reduced.matches)stop();});addEventListener('resize',fit);
+window.DUR=duration;window.__getSceneState=()=>{const s=stateAt(current);return{t:s.t,scene:s.step,scenes:SCENES.map((q,i)=>({id:String(i),start:q.start,end:q.end})),objects:[{id:s.paper.id,bbox:{x:126.6,y:834.8,width:176.8,height:270.4}},{id:s.image.id,bbox:{x:s.image.x-68*s.image.s,y:s.image.y+365-104*s.image.s,width:136*s.image.s,height:208*s.image.s},alpha:s.image.alpha}]};};
+window.__renderReady=document.fonts.ready.then(()=>{fit();seek(fixed?Number(new URLSearchParams(location.search).get('t')):0);});
+})();
+</script>
+</html>
