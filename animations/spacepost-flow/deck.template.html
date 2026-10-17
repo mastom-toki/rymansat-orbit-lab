@@ -1,0 +1,104 @@
+<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';">
+<title>宇宙ポストの旅：8つの場面</title><link rel="icon" href="data:,">
+<style>
+:root{font-family:system-ui,"Yu Gothic",sans-serif;color:#202c34;background:#e9e9e4;color-scheme:light}*{box-sizing:border-box}body{margin:0}main{max-width:600px;margin:auto;padding:12px}.slide{position:relative;aspect-ratio:3/4;overflow:hidden;background:#fffdf5}#stage{position:absolute;width:1080px;height:1440px;transform-origin:top left;background:#fffdf5;color:#202c34}header{position:absolute;left:76px;right:76px;top:64px}.series{font-size:36px;margin:0 0 28px;font-weight:650}#step{float:right;font-size:36px;font-variant-numeric:tabular-nums}h1{font-size:76px;line-height:1.28;letter-spacing:-.025em;margin:0;font-weight:800;white-space:pre-line}.track{height:5px;background:#b8c3c5;margin-top:30px}#fill{height:5px;background:currentColor;width:12.5%}canvas{position:absolute;left:0;top:320px;width:1080px;height:850px}#caption{position:absolute;left:76px;right:76px;top:1184px;font-size:46px;font-weight:700;line-height:1.5;margin:0}.trial{position:absolute;left:76px;right:76px;bottom:38px;font-size:27px;line-height:1.6;margin:0}#hud{padding:16px 0}nav{display:flex;gap:8px;flex-wrap:wrap}button{font:inherit;border:1px solid #879498;background:#fff;color:#202c34;min-height:44px;padding:9px 12px;cursor:pointer}button:disabled{opacity:.45;cursor:default}button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #226187;outline-offset:3px}#play{background:#243d48;color:#fff;border-color:#243d48}input[type=range]{display:block;width:100%;height:36px;accent-color:#226187}label,output,#status{font-size:14px}#status{line-height:1.6}details{border-top:1px solid #879498;padding-top:12px;font-size:14px;line-height:1.8}summary{cursor:pointer}a{color:#195781}.render main{display:block;max-width:none;padding:0}.render .slide{width:100vw;height:100vh;aspect-ratio:auto}.render #hud,.render details{display:none}.render{overflow:hidden}@media(min-width:850px){main{display:grid;max-width:1040px;grid-template-columns:minmax(0,600px) minmax(250px,1fr);gap:20px;padding:20px;align-items:start}.slide{grid-row:1/3}#hud{padding:0}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+
+/* Embedded in ORBIT LAB. Enlarged text may scroll; controls are never clipped. */
+.embed main{display:block;max-width:none;padding:0}
+.embed .slide{height:max(260px,calc(100svh - 235px));aspect-ratio:auto}
+.embed #hud{padding:8px 0 0}
+.embed button{font-size:14px;padding:8px 10px}
+.embed nav{gap:6px}
+.embed input[type=range]{height:28px;margin:0;width:100%}
+.embed label,.embed output,.embed #status{font-size:12px}
+.embed #hud p{margin:8px 0}
+.embed details{margin-top:10px}
+@media(min-width:850px){.embed main{display:grid;grid-template-columns:minmax(0,600px) minmax(220px,1fr);gap:20px}.embed .slide{height:100svh;grid-row:1/3}}
+</style>
+<main><section class="slide" aria-label="短冊から流れ星まで、8つの場面で見る宇宙ポスト"><div id="stage"><header><p class="series">宇宙ポストの旅 <span id="step">1 / 8</span></p><h1 id="title">お願いごとを書く</h1><div class="track"><div id="fill"></div></div></header><canvas id="art" width="1080" height="850" role="img" aria-label="短冊から撮影した同じ画像を最後まで追う模式アニメーション"></canvas><p id="caption">例文の短冊です</p><p class="trial">企画検討用の試作・採用未定<br>実際の宇宙ポスト受付ではありません</p></div></section>
+<div id="hud"><nav aria-label="動画の操作"><button id="play">再生</button><button id="prev">前の場面</button><button id="next">次の場面</button><button id="restart">最初へ</button></nav><label for="scrub">再生位置</label><input type="range" id="scrub" min="0" max="24" step="0.1" value="0"><output id="time" for="scrub">0.0 / 24.0秒</output><p><label><input type="checkbox" id="reduce"> 動きを減らす（場面の結果を見る）</label></p><p id="status" role="status" aria-live="polite">停止中。再生、または次の場面で進めます。</p></div>
+<details><summary>文章で読む・この動画について</summary><ol id="transcript"></ol><p>紙の原本を地上に残し、撮影した画像を衛星に載せる流れを示す模式図です。カメラ、SDカード、衛星内部、ロケット、軌道、再突入は説明用の表現です。実機の構造、時間、距離、実際の運用を再現するものではありません。</p><p>動き低減中は各場面の結果へ移動します。矢印キーでも前後の場面へ進めます（ボタン・スライダーの操作中を除く）。例文選択、受付、自由文、個人情報入力、実際の衛星との接続はありません。</p><p>個別素材4点は内蔵画像生成による独自図案。場面と動きはslide-hubのMotion.scenes／seg／ease／lerpを使用しています。動画生成AIは使用していません。説明の参照：<a href="https://www.rymansat.com/spacepost" target="_blank" rel="noopener">宇宙ポスト公式案内</a>。</p></details></main>
+<script>/* MOTION_RUNTIME */</script>
+<script id="content">window.FAMILY_CONTENT=/* CONTENT_JSON */;</script>
+<script>/* EXPERIENCE_CORE */</script>
+<script src="./flow-content.js"></script>
+<script>window.FAMILY_CONTENT=SpacepostContent.select(window.FAMILY_CONTENT,new URLSearchParams(location.search));</script>
+<script id="family-model">
+(function(root){
+'use strict';
+const M=root.Motion,C=root.FAMILY_CONTENT,T=M.scenes(C.scenes),E=(t,a,b)=>M.ease.inOutCubic(M.seg(t,a,b)),L=M.lerp;
+function stateAt(value){const t=M.clamp(Number.isFinite(Number(value))?Number(value):0,0,T.total),a=T.at(t),u=a.local,i=a.index;
+ const s={t,index:i,local:u,scene:a.scene,dark:i>=5,bg:i>=5?'#173e58':i===4?'#e4f1f4':'#fffdf5',photoId:i?'photo-01':null,paperVisible:i<=3,photo:null,satellite:null,sd:null,rocket:null};
+ if(i===0)s.writing=M.seg(u,.02,.75);
+ if(i===1){const p=E(u,.25,1.05);s.photo={x:L(300,760,p),y:L(450,570,p),w:L(225,245,p),alpha:M.seg(u,.25,.55)};}
+ if(i===2){const p=E(u,.18,1);s.sd={x:760,y:440,w:290};s.photo={x:L(300,760,p),y:L(430,528,p),w:L(260,115,p),alpha:1};}
+ if(i===3){const p=E(u,.18,1);s.satellite={x:650,y:430,w:760,alpha:1,payload:E(u,.65,1.1)};s.sd={x:L(250,711,p),y:L(420,405,p),w:L(235,110,p),alpha:1-E(u,.75,1.1)};}
+ if(i===4){const p=E(u,.35,1.4);s.rocket={x:540,y:L(485,135,p),h:L(720,500,p),alpha:1,open:0,flame:M.seg(u,.3,.7)};s.satellite={x:540,y:s.rocket.y-s.rocket.h*.08,w:s.rocket.h*.17,alpha:1,payload:1};}
+ if(i===5){const p=E(u,.2,1.05);s.rocket={x:780,y:465+E(u,.7,1.65)*100,h:730,alpha:1-E(u,.9,1.7),open:E(u,.1,.7),flame:0};s.satellite={x:L(780,480,p),y:L(320,430,p),w:L(125,760,p),alpha:1,payload:1};}
+ if(i===6){const angle=-Math.PI/2+u/4*Math.PI*2.5;s.satellite={x:540+330*Math.cos(angle),y:470+235*Math.sin(angle),w:340,alpha:1,payload:1};s.orbitAngle=angle;}
+ if(i===7){const p=E(u,.15,1.15);s.satellite={x:L(850,550,p),y:L(230,520,p),w:L(340,230,p),alpha:1-E(u,.95,1.5),payload:1};s.trail=M.seg(u,.3,.7)*(1-M.seg(u,1.6,2.1));s.complete=u>=2;s.takeaway=u>=2;}
+ return s;
+}
+root.FamilyFlow={stateAt,timeline:T,duration:T.total};
+})(typeof window==='object'?window:globalThis);
+</script>
+<script>
+(function(){
+'use strict';
+const M=Motion,{stateAt,timeline,duration}=FamilyFlow,$=id=>document.getElementById(id),ctx=$('art').getContext('2d'),images={};
+const names=['camera','satellite','rocket','earth'];
+const ready=names.map(name=>{const im=new Image();im.src=`assets/${name}.png`;images[name]=im;return im.decode();});
+const photo=document.createElement('canvas');photo.width=280;photo.height=340;
+let current=0,playing=false,frame=0,baseTime=0,baseClock=0,lastScene=-1,completionSent=false,isReady=false;
+const query=new URLSearchParams(location.search),fixed=query.has('t'),embedded=query.get('embed')==='1',reduced=matchMedia('(prefers-reduced-motion: reduce)');
+if(fixed)document.documentElement.classList.add('render');if(embedded)document.documentElement.classList.add('embed');let parentReduced=query.get('reduce')==='1',localReduced=false;$('reduce').checked=parentReduced||reduced.matches;$('reduce').disabled=parentReduced||reduced.matches;$('scrub').max=duration;for(const id of ['play','prev','next','restart','scrub','reduce'])$(id).disabled=true;$('status').textContent='絵を読み込んでいます…';
+const wishText=FAMILY_CONTENT.wish.join('');const wishNote=document.createElement('p');wishNote.textContent='選んだ例文：'+wishText;$('transcript').before(wishNote);
+function notifyParent(type){if(embedded&&parent!==window)parent.postMessage({channel:'orbit-spacepost',type},location.origin==='null'?'*':location.origin);}
+timeline.list.forEach(s=>{const li=document.createElement('li');li.textContent=`${s.title}。${s.caption}。`;$('transcript').append(li);});
+function line(x1,y1,x2,y2,color='#35434a',width=4){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();}
+function label(str,x,y,size=38,color='#202c34'){ctx.fillStyle=color;ctx.font=`700 ${size}px system-ui,"Yu Gothic",sans-serif`;ctx.textAlign='center';ctx.fillText(str,x,y);}
+function star(c,x,y,r,color='#d8a72d'){c.fillStyle=color;c.beginPath();for(let n=0;n<10;n++){const a=-Math.PI/2+n*Math.PI/5;c.lineTo(x+Math.cos(a)*(n%2?r*.44:r),y+Math.sin(a)*(n%2?r*.44:r));}c.closePath();c.fill();}
+function wish(c,x,y,scale=1,progress=1){c.save();c.translate(x,y);c.scale(scale,scale);c.fillStyle='#fffef7';c.strokeStyle='#475257';c.lineWidth=3;c.beginPath();c.moveTo(-95,-175);c.lineTo(95,-175);c.lineTo(95,175);c.lineTo(-95,175);c.closePath();c.fill();c.stroke();star(c,0,-105,25);c.fillStyle='#202c34';c.textAlign='center';const size=Math.min(30,160/Math.max(...FAMILY_CONTENT.wish.map(v=>Array.from(v).length)));c.font=`700 ${size}px system-ui,"Yu Gothic",sans-serif`;FAMILY_CONTENT.wish.forEach((v,i)=>c.fillText(v.slice(0,Math.ceil(v.length*progress)),0,-10+i*45));c.restore();}
+function picture(x,y,w,alpha=1){if(alpha<=0)return;ctx.save();ctx.globalAlpha=alpha;const h=w*340/280;ctx.drawImage(photo,x-w/2,y-h/2,w,h);ctx.restore();}
+function sprite(name,x,y,w,alpha=1){if(alpha<=0)return;const im=images[name],h=w*im.height/im.width;ctx.save();ctx.globalAlpha=alpha;ctx.drawImage(im,x-w/2,y-h/2,w,h);ctx.restore();}
+function satellite(o){if(!o||o.alpha<=0)return;sprite('satellite',o.x,o.y,o.w,o.alpha);const h=o.w*images.satellite.height/images.satellite.width;picture(o.x+o.w*.08,o.y+h*.045,o.w*.18,o.alpha*(o.payload??1));}
+function sd(o,show=true){if(!o||(o.alpha??1)<=0)return;ctx.save();ctx.globalAlpha=o.alpha??1;ctx.translate(o.x,o.y);const sc=o.w/220;ctx.scale(sc,sc);ctx.fillStyle='#343c43';ctx.strokeStyle='#202c34';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-110,-145);ctx.lineTo(69,-145);ctx.lineTo(110,-103);ctx.lineTo(110,145);ctx.lineTo(-110,145);ctx.closePath();ctx.fill();ctx.stroke();for(let n=0;n<5;n++){ctx.fillStyle='#d2ae56';ctx.fillRect(-76+n*32,-128,20,38);}label('SD',0,-35,53,'#fff');if(show)picture(0,67,92,1);ctx.restore();}
+function pencil(x,y,rotation=.4){ctx.save();ctx.translate(x,y);ctx.rotate(rotation);ctx.fillStyle='#d8aa39';ctx.strokeStyle='#35434a';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-11,-95);ctx.lineTo(11,-95);ctx.lineTo(11,35);ctx.lineTo(0,62);ctx.lineTo(-11,35);ctx.closePath();ctx.fill();ctx.stroke();line(0,48,0,60,'#202c34',5);ctx.restore();}
+function rocket(o){if(!o||o.alpha<=0)return;const im=images.rocket,w=o.h*im.width/im.height;ctx.save();ctx.globalAlpha=o.alpha;ctx.translate(o.x,o.y);
+ if(o.flame>0){ctx.fillStyle='#dd912f';ctx.beginPath();ctx.moveTo(-35,o.h*.39);ctx.lineTo(0,o.h*.5+80+o.flame*70);ctx.lineTo(35,o.h*.39);ctx.closePath();ctx.fill();ctx.fillStyle='#ffe8a2';ctx.beginPath();ctx.moveTo(-17,o.h*.4);ctx.lineTo(0,o.h*.5+65);ctx.lineTo(17,o.h*.4);ctx.closePath();ctx.fill();}
+ if(o.open<=0)ctx.drawImage(im,-w/2,-o.h/2,w,o.h);else{
+ ctx.save();ctx.beginPath();ctx.rect(-w/2,-o.h*.19,w,o.h*.7);ctx.clip();ctx.drawImage(im,-w/2,-o.h/2,w,o.h);ctx.restore();
+ for(const dir of[-1,1]){ctx.save();ctx.translate(dir*o.open*110,-o.open*65);ctx.beginPath();ctx.rect(dir<0?-w/2:0,-o.h/2,w/2,o.h*.31+2);ctx.clip();ctx.drawImage(im,-w/2,-o.h/2,w,o.h);ctx.restore();}}
+ ctx.restore();}
+function desk(){line(105,730,975,730,'#9f9b88',8);line(145,734,145,820,'#9f9b88',7);line(935,734,935,820,'#9f9b88',7);}
+function sky(){for(const p of[[120,120],[890,110],[920,740],[130,650],[470,80],[970,430]]){ctx.fillStyle='#d4e5e9';ctx.beginPath();ctx.arc(...p,4,0,Math.PI*2);ctx.fill();}}
+function draw(s){ctx.clearRect(0,0,1080,850);const u=s.local,i=s.index;
+ if(i===0){desk();wish(ctx,540,425,1.48,s.writing);pencil(660+M.ease.outCubic(M.seg(u,.75,1.05))*90+Math.sin(u*12)*6,420+Math.sin(u*9)*9,.45);label('例文',540,112,34);}
+ if(i===1){desk();wish(ctx,300,450,1.2,1);sprite('camera',750,220,545);if(u>.25&&u<.85){label('パシャ',745,95,48);for(let k=0;k<3;k++)line(565+k*55,370,520+k*40,420,'#526d7a',4);}picture(s.photo.x,s.photo.y,s.photo.w,s.photo.alpha);label('元の紙',300,700,37);if(u>1.05)label('できた写真',760,770,37);}
+ if(i===2){sd(s.sd,false);picture(s.photo.x,s.photo.y,s.photo.w);if(u<1)label('同じ写真',300,660,37);else label('画像を保存',760,720,40);}
+ if(i===3){sd(s.sd,true);satellite(s.satellite);if(u<.8)label('写真の入ったSD',230,625,34);else label('衛星の中のイメージ',650,740,36);wish(ctx,150,750,.35,1);label('紙は地上に',300,810,32);}
+ if(i===4){ctx.fillStyle='#c5dcd0';ctx.fillRect(0,775,1080,75);for(const p of[[50,765,80],[160,760,65],[900,765,90],[1040,750,100]]){ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(...p,0,Math.PI*2);ctx.fill();}rocket(s.rocket);ctx.save();ctx.strokeStyle='#526d7a';ctx.lineWidth=3;ctx.setLineDash([8,7]);ctx.strokeRect(s.satellite.x-72,s.satellite.y-60,144,120);ctx.restore();satellite(s.satellite);wish(ctx,155,665,.36,1);label('紙は地上',175,790,32);}
+ if(i===5){sky();rocket(s.rocket);satellite(s.satellite);}
+ if(i===6){sky();ctx.save();ctx.strokeStyle='#a2c0d0';ctx.lineWidth=3;ctx.setLineDash([12,13]);ctx.beginPath();ctx.ellipse(540,470,330,235,0,0,Math.PI*2);ctx.stroke();ctx.restore();sprite('earth',540,470,620);satellite(s.satellite);}
+ if(i===7){sky();sprite('earth',230,710,700);satellite(s.satellite);if(s.trail>0){ctx.save();ctx.globalAlpha=s.trail;const x=s.satellite.x,y=s.satellite.y;ctx.lineCap='round';line(x+180,y-180,x,y,'#e3a23c',30);line(x+110,y-110,x,y,'#fff0b4',12);star(ctx,x,y,31,'#fff0b4');ctx.restore();}}
+}
+function fit(){const r=document.querySelector('.slide'),k=Math.min(r.clientWidth/1080,r.clientHeight/1440);$('stage').style.transform=`scale(${k})`;$('stage').style.left=`${(r.clientWidth-k*1080)/2}px`;$('stage').style.top=`${(r.clientHeight-k*1440)/2}px`;}
+function seek(value){const s=stateAt(value);current=s.t;draw(s);if(s.complete&&!completionSent){completionSent=true;notifyParent('complete');}$('stage').style.backgroundColor=s.bg;$('stage').style.color=s.dark?'#fffdf3':'#202c34';$('title').textContent=s.takeaway?'宇宙へ行くのは、\n短冊の画像。':s.scene.title;$('title').style.fontSize=s.takeaway?'64px':'76px';$('caption').textContent=s.takeaway?'もとの紙は、地上に残ります。':s.scene.caption;$('step').textContent=`${s.index+1} / 8`;$('fill').style.width=`${(s.index+1)*12.5}%`;$('scrub').value=s.t;$('time').textContent=`${s.t.toFixed(1)} / ${duration.toFixed(1)}秒`;const active=document.activeElement;$('prev').disabled=s.index===0;$('next').disabled=s.index===7;if($('next').disabled&&active===$('next'))$('restart').focus();else if($('prev').disabled&&active===$('prev'))$('next').focus();$('art').setAttribute('aria-label',`${s.index+1}番目。${s.scene.title}。${s.takeaway?'宇宙へ行くのは、短冊の画像。':s.scene.caption}`);if(lastScene!==s.index){$('status').textContent=`${s.index+1}/8。${s.scene.title}。${playing?'再生中':'停止中'}`;lastScene=s.index;}return s;}
+function updateStatus(){const s=stateAt(current);$('status').textContent=`${s.index+1}/8。${s.scene.title}。${playing?'再生中':'停止中'}`;}
+function stop(){playing=false;cancelAnimationFrame(frame);$('play').textContent='再生';updateStatus();}
+function jump(dir){stop();const s=stateAt(current),target=timeline.list[M.clamp(s.index+dir,0,7)];seek(target.start+target.preview);}
+function tick(clock){if(!playing)return;seek(baseTime+(clock-baseClock)/1000);if(current>=duration){stop();return;}frame=requestAnimationFrame(tick);}
+function play(){if(playing){stop();return;}if($('reduce').checked){const s=stateAt(current),q=s.local<s.scene.preview?s.scene:timeline.list[Math.min(7,s.index+1)];seek(q.start+q.preview);return;}if(current>=duration)resetJourney();playing=true;baseTime=current;baseClock=performance.now();$('play').textContent='一時停止';updateStatus();frame=requestAnimationFrame(tick);}
+function resetJourney(){completionSent=false;notifyParent('restart');seek(0);}
+const inputGate=OrbitPhoto.primaryActionGate(350);
+function guarded(fn){return e=>{if(isReady&&inputGate.accept(e.timeStamp))fn();};}
+const playAction=guarded(play),prevAction=guarded(()=>jump(-1)),nextAction=guarded(()=>jump(1));
+$('play').onclick=playAction;$('prev').onclick=prevAction;$('next').onclick=nextAction;$('restart').onclick=guarded(()=>{stop();resetJourney();});$('scrub').oninput=e=>{stop();seek(e.target.value);};function applyMotion(){const forced=parentReduced||reduced.matches;$('reduce').checked=forced||localReduced;$('reduce').disabled=forced||!isReady;if(isReady&&$('reduce').checked)stop();}$('reduce').onchange=()=>{localReduced=$('reduce').checked;applyMotion();};reduced.addEventListener('change',applyMotion);document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});document.addEventListener('keydown',e=>{if(e.altKey||e.ctrlKey||e.metaKey||e.target.closest('input,button,a,summary'))return;if(e.key==='ArrowRight'){e.preventDefault();nextAction(e);}else if(e.key==='ArrowLeft'){e.preventDefault();prevAction(e);}else if(e.code==='Space'){e.preventDefault();playAction(e);}});addEventListener('resize',fit);
+addEventListener('pagehide',stop);
+addEventListener('message',e=>{if(!embedded||e.source!==parent||e.origin!==location.origin||e.data?.channel!=='orbit-spacepost')return;if(e.data.type==='pause')stop();if(e.data.type==='motion'&&typeof e.data.reduced==='boolean'){parentReduced=e.data.reduced;applyMotion();}});
+window.seek=seek;window.DUR=duration;window.__getSceneState=()=>{const s=stateAt(current);let obj=s.photo??s.satellite??s.sd??s.rocket;const objects=obj?[{id:s.satellite?'satellite-with-photo-01':s.sd?'sd-with-photo-01':'photo-01',bbox:[obj.x-(obj.w??160)/2,obj.y+320-(obj.w??160)/2,obj.w??160,obj.w??160]}]:[];return{t:s.t,scene:s.index,photoId:s.photoId,paperVisible:s.paperVisible,takeaway:!!s.takeaway,objects,scenes:timeline.list.map(a=>({id:a.id,start:a.start,end:a.end}))};};
+window.__renderReady=Promise.all([...ready,document.fonts.ready]).then(()=>{const c=photo.getContext('2d');c.fillStyle='#edf3f4';c.fillRect(0,0,280,340);wish(c,140,170,.82,1);c.strokeStyle='#3c7590';c.lineWidth=9;c.strokeRect(4.5,4.5,271,331);isReady=true;for(const id of ['play','restart','scrub'])$(id).disabled=false;applyMotion();fit();seek(fixed?Number(query.get('t')):0);notifyParent('ready');});
+window.__renderReady.catch(()=>{$('status').textContent='絵を読み込めませんでした。ページを再読み込みしてください。';});
+})();
+</script></html>

@@ -1,0 +1,9 @@
+{
+  "title": "宇宙ポストの旅",
+  "kind": "motion",
+  "created": "2026-10-17",
+  "source": "ORBIT LAB / 家族向けの8場面。個別素材＋Motion.scenes／seg／ease／lerp",
+  "duration": 24,
+  "size": "1080x1440",
+  "intent": "8場面の独立配置。冒頭から動き、写真を同じ画像のまま追う。場面境界はカット。撮影の白フラッシュなし。仕組みの模式図。無音。"
+}
