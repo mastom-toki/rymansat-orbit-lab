@@ -1,12 +1,12 @@
 /* Recommended photo mission and continuous, browser-local wish-card journey. */
 'use strict';
 const experienceInputGate=OrbitPhoto.primaryActionGate(350);
-let photoMission,postMotion=null,experienceTimer=null,experienceGeneration=0,frameDrag=null;
+let photoMission,experienceTimer=null,experienceGeneration=0,frameDrag=null;
 function freshPhotoMission(){return {phase:'attach',camera:false,frame:{x:0,y:0},photo:null,groundSrc:null,recorded:false};}
 photoMission=freshPhotoMission();
 function reducedMotion(){return state.reduceMotion||window.matchMedia('(prefers-reduced-motion: reduce)').matches;}
 function cancelExperience(){
- if(experienceTimer!==null)clearTimeout(experienceTimer);experienceTimer=null;experienceGeneration++;frameDrag=null;postMotion=null;
+ if(experienceTimer!==null)clearTimeout(experienceTimer);experienceTimer=null;experienceGeneration++;frameDrag=null;pausePostFlow();
  if(photoMission.phase==='attaching')photoMission.phase='frame';
  if(photoMission.phase==='sending')photoMission.phase='review';
 }
@@ -69,7 +69,6 @@ function setFraming(x,y,message){
 }
 function experienceAction(name){
  const m=photoMission;
- if(name==='skip-post-motion'){if(state.page==='post'&&postMotion){if(experienceTimer!==null)clearTimeout(experienceTimer);experienceTimer=null;experienceGeneration++;finishPostMotion();}return;}
  if(state.page!=='mission'||state.course!=='guided')return;
  if(name==='frame-left'||name==='frame-right'){setFraming(m.frame.x+(name==='frame-left'?-20:20),m.frame.y,name==='frame-left'?'地球を左へ動かしました。':'地球を右へ動かしました。');return;}
  if(name==='skip-photo-motion'){if(m.phase==='attaching'||m.phase==='sending'){if(experienceTimer!==null)clearTimeout(experienceTimer);experienceTimer=null;experienceGeneration++;finishPhotoMotion();}return;}
@@ -81,47 +80,28 @@ function experienceAction(name){
  m.phase=next;render();
  if(next==='attaching'||next==='sending')laterExperience(finishPhotoMotion,next==='attaching'?700:1100);
 }
-function advanceJourney(back=false){
- if(state.page!=='post'||state.postStage<0||(!back&&postMotion))return;
- cancelExperience();
- if(back){state.postStage=Math.max(-1,state.postStage-1);render();return;}
- if(state.postStage===4){state.postStage=-1;state.quizAnswer=null;state.postRecorded=false;render();return;}
- state.postStage++;postMotion=state.postStage===1?'scan':state.postStage===2?'load':null;
- if(state.postStage===4&&!state.postRecorded){state.postRecorded=true;state.counts.journeys++;}
- render();
- if(postMotion)laterExperience(finishPostMotion,800);
+function wishCard(){
+ return `<div class="continuity-card post-wish-paper" data-card-id="wish-${state.wishIndex}" aria-label="例文の短冊：${esc(WISHES[state.wishIndex])}"><span class="wish-star" aria-hidden="true">★</span><p>${esc(WISHES[state.wishIndex])}</p></div>`;
 }
-
-function finishPostMotion(){
- if(state.page!=='post')return;postMotion=null;
- const skip=main.querySelector('[data-exp="skip-post-motion"]'),restoreFocus=skip&&document.activeElement===skip;
- main.querySelectorAll('.scan-motion,.load-motion').forEach(el=>el.classList.remove('scan-motion','load-motion'));
- main.querySelector('.scan-line')?.remove();skip?.remove();
- const next=main.querySelector('[data-action="journey-next"]');if(next){next.disabled=false;if(restoreFocus)next.focus({preventScroll:true});}
-}
-function wishCard(kind='paper'){
- return `<div class="continuity-card" data-card-id="wish-${state.wishIndex}" data-card-kind="${kind}" aria-label="${kind==='paper'?'紙':'同じ願いの画像'}：${esc(WISHES[state.wishIndex])}"><span class="card-address">宇宙ポスト / 体験用カード</span><span class="card-stamp">${icon('satellite',16)}</span><p>${esc(WISHES[state.wishIndex])}</p></div>`;
-}
-function recommendedPostIntro(){return `<div class="ex-wrap"><header class="ex-head"><h1 tabindex="-1">同じ願いのカードで、宇宙へ。</h1><p>例文を選ぶと、そのカードの旅が始まります。</p></header><section class="ex-stage" style="margin-top:12px"><div class="ex-scene post-choice-scene">${wishCard()}</div><div class="compact-wishes" role="group" aria-label="体験用の願いを選ぶ">${WISHES.map((w,i)=>`<button class="wish-option" id="wish-${i}" data-wish="${i}" aria-pressed="${state.wishIndex===i}"><span class="wish-check">${icon('check',12)}</span>${esc(w)}</button>`).join('')}</div><div class="ex-actions"><button class="btn orange primary-action" data-action="start-journey">このカードで旅を始める ${icon('arrow',17)}</button></div><p class="ex-meta">例文の模擬体験です。実際の受付・送信・衛星への搭載は行いません。</p></section></div>`;}
-const POST_STEPS=[
- {name:'紙',title:'願いの紙を、机に置きました。',status:'写真にすると、画像の複製ができます。',button:'写真にする'},
- {name:'画像',title:'紙は残り、画像の複製ができました。',status:'宇宙へ運ぶのは、右側の画像データです。',button:'画像を衛星に載せる'},
- {name:'衛星の中',title:'同じ画像が、衛星の中に入りました。',status:'メモリの中のカードを見てみよう。',button:'衛星と地球を回る'},
- {name:'周回',title:'このカードが、衛星と地球を回ります。',status:'紙は地上に残り、画像が衛星と旅をしています。',button:'旅のおわりを見る'},
- {name:'おわり',title:'最後は、再突入のイメージへ。',status:'同じカードの画像が、この旅をたどりました。',button:'もう一度、願いを選ぶ'}
-];
-function postOrbitSvg(){return `<svg viewBox="0 0 320 230" aria-hidden="true"><ellipse cx="186" cy="120" rx="120" ry="75" fill="none" stroke="#7fbbd2" stroke-dasharray="5 6"/><circle cx="205" cy="125" r="64" fill="#226994"/><path d="m163 99 30-28 22 13-8 25 20 21-16 25-11-15-17-10-5-18z" fill="#92b789"/></svg>`;}
+function recommendedPostIntro(){return `<div class="ex-wrap"><header class="ex-head"><h1 tabindex="-1">願いの画像を、宇宙へ。</h1><p>例文を選んで、短冊から流れ星までを見てみよう。</p></header><section class="ex-stage" style="margin-top:12px"><div class="ex-scene post-choice-scene">${wishCard()}</div><div class="compact-wishes" role="group" aria-label="体験用の願いを選ぶ">${WISHES.map((w,i)=>`<button class="wish-option" id="wish-${i}" data-wish="${i}" aria-pressed="${state.wishIndex===i}"><span class="wish-check">${icon('check',12)}</span>${esc(w)}</button>`).join('')}</div><div class="ex-actions"><button class="btn orange primary-action" data-action="start-journey">この短冊で旅を始める ${icon('arrow',17)}</button></div><p class="ex-meta">例文の模擬体験です。実際の受付・送信・衛星への搭載は行いません。</p></section></div>`;}
 function recommendedJourney(){
- const n=state.postStage,s=POST_STEPS[n];let scene='';
- if(n===0)scene=`<div class="ex-scene post-desk"><div><p class="card-copy-label">地上の机 / 元の紙</p>${wishCard('paper')}</div></div>`;
- if(n===1)scene=`<div class="ex-scene post-copy-scene ${postMotion==='scan'?'scan-motion':''}"><div><p class="card-copy-label">机に残る紙</p>${wishCard('paper')}</div><div class="image-copy"><p class="card-copy-label">できた画像の複製</p>${wishCard('image')}</div>${postMotion==='scan'?'<div class="scan-line" aria-hidden="true"></div>':''}</div>`;
- if(n===2)scene=`<div class="ex-scene ${postMotion==='load'?'load-motion':''}"><div class="satellite-memory"><p>衛星の中 / メモリ</p>${wishCard('image')}</div><p class="paper-kept">元の紙は、地上の机に残っています。</p></div>`;
- if(n===3)scene=`<div class="ex-scene orbit-story">${postOrbitSvg()}<div class="satellite-memory"><p>衛星の中にある同じ画像</p>${wishCard('image')}</div><p class="paper-kept">地球を回る模擬体験 / 実際の軌道ではありません</p></div>`;
- if(n===4)scene=`<div class="ex-scene post-end-scene">${wishCard('image')}<p class="paper-kept">再突入のイメージ。実際の時期・見え方は再現していません。</p></div>`;
- const supplement=n===1?`<details class="optional-quiz"><summary>補足：衛星に載るのはどっち？（回答は任意）</summary><div class="quiz-options"><button data-quiz="paper">元の紙</button><button data-quiz="data">画像の複製</button></div><p class="quiz-feedback" role="status">${quizText()}</p></details>`:'';
- return `<div class="ex-wrap" data-post-stage="${n}"><header class="ex-head"><h1 tabindex="-1">同じ願いのカードを、宇宙へ。</h1><p>今いる場所と、画像の移動を見てみよう。</p></header><ol class="ex-progress" aria-label="願いの旅の進行">${POST_STEPS.map((p,i)=>`<li class="${i===n?'current':''}" ${i===n?'aria-current="step"':''}>${i+1} ${p.name}</li>`).join('')}</ol><section class="ex-stage"><h2>${s.title}</h2>${scene}<p class="post-wish-caption">選んだカード：${esc(WISHES[state.wishIndex])}</p><p class="ex-status" role="status">${s.status}</p><div class="ex-actions"><button class="btn orange primary-action" data-action="journey-next" ${postMotion?'disabled':''}>${s.button} ${icon('arrow',17)}</button><button class="btn secondary secondary-action" data-action="journey-back">${n===0?'選び直す':'ひとつ戻る'}</button>${postMotion?'<button class="link-button" data-exp="skip-post-motion">演出をスキップ</button>':''}</div>${supplement}<p class="ex-meta">実際の宇宙ポスト受付・送信・搭載ではありません。</p></section><div class="ex-secondary"><button class="link-button" data-go="home">ホームへ</button><button class="link-button" data-go="mission">地球の写真体験へ</button></div></div>`;
+ const wish=Number.isInteger(state.wishIndex)&&state.wishIndex>=0&&state.wishIndex<WISHES.length?state.wishIndex:0;
+ return `<div class="post-flow-shell"><h1 tabindex="-1">願いの画像を、宇宙へ。</h1><iframe class="post-flow-frame" title="選んだ短冊の画像を追う、宇宙ポストの8場面" src="./animations/spacepost-flow/deck.html?embed=1&amp;wish=${wish}&amp;reduce=${reducedMotion()?1:0}"></iframe><div class="post-flow-footer"><button class="link-button" data-action="select-wish">願いを選び直す</button><button class="link-button" data-go="mission">地球の写真体験へ</button></div></div>`;
 }
-function quizText(){return state.quizAnswer==='data'?'そうです。元の紙は地上に残り、画像データを衛星に載せます。':state.quizAnswer==='paper'?'衛星に載るのは画像の複製です。元の紙は地上に残ります。':'どちらを選んでも、旅は先へ進めます。';}
+function currentPostFrame(){return main.querySelector('.post-flow-frame');}
+function sendPostFlow(type,extra={}){
+ const frame=currentPostFrame();if(!frame?.contentWindow)return;
+ frame.contentWindow.postMessage({channel:'orbit-spacepost',type,...extra},location.origin==='null'?'*':location.origin);
+}
+function pausePostFlow(){sendPostFlow('pause');}
+function syncPostMotion(){sendPostFlow('motion',{reduced:reducedMotion()});}
+window.addEventListener('message',event=>{
+ const frame=currentPostFrame();
+ if(state.page!=='post'||state.postStage<0||!frame||event.source!==frame.contentWindow||event.origin!==location.origin||event.data?.channel!=='orbit-spacepost')return;
+ if(event.data.type==='ready')syncPostMotion();
+ if(event.data.type==='restart')state.postRecorded=false;
+ if(event.data.type==='complete'&&!state.postRecorded){state.postRecorded=true;state.counts.journeys++;}
+});
 
 document.addEventListener('pointerdown',e=>{
  const pad=e.target.closest('[data-framepad]');if(!pad||photoMission.phase!=='frame')return;

@@ -831,3 +831,15 @@
     padding:12px 0
   }
 }
+
+/* Eight-scene post journey; sized independently of the satellite experience. */
+.post-wish-paper{max-width:150px;min-height:166px;border-radius:0;background:#fffef7;box-shadow:none;text-align:center;padding:15px 12px;border-color:#475257}
+.post-wish-paper .wish-star{display:block;color:#b28a19;font-size:30px;line-height:1.2}
+.post-wish-paper p{font-size:15px;line-height:1.8;margin:10px 0 0}
+.post-choice-scene:has(.post-wish-paper){background:#fffdf5;min-height:190px}
+.post-flow-shell{max-width:1040px;margin:auto;padding:12px 0}
+.post-flow-shell>h1{font-size:20px;line-height:1.4;margin:0 0 10px}
+.post-flow-frame{display:block;border:0;width:100%;height:calc(100svh - 242px);min-height:540px;max-height:850px;background:#fffdf5}
+.post-flow-footer{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+.post-flow-footer .link-button{min-height:44px;padding:8px 0}
+@media(max-width:560px){.post-flow-shell{padding:8px 0}.post-flow-shell>h1{font-size:18px;margin-bottom:6px}.post-flow-frame{height:calc(100svh - 234px);min-height:520px}.post-flow-footer{gap:16px}.post-choice-scene:has(.post-wish-paper){min-height:175px}}

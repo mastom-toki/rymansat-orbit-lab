@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f5f7f8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%274%27 fill=%27%23173c60%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%279%27 fill=%27none%27 stroke=%27white%27/%3E%3C/svg%3E">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src data: blob:; font-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src data: blob:; font-src 'none'; connect-src 'none'; object-src 'none'; frame-src 'self'; base-uri 'none'; form-action 'none';">
 <title>ORBIT LAB | リーマンサット 体験デモ</title>
 <style>
 :root{--bg:#0a131d;--panel:#111e2b;--panel2:#162533;--line:#2b3a47;--text:#f2f5f3;--muted:#a5b5be;--mint:#a9ebd1;--mint-dark:#123c32;--orange:#f8b180;--cream:#f0ebdf;--red:#ffaaaa;--radius:22px;--max:1280px;--sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif}
@@ -177,6 +177,7 @@ function render(keepFocus=null){
  const oldScroll=window.scrollY;
  const renderers={home,mission:()=>state.course==='guided'?guidedMission():state.mstep==='choose'?missionChoose():state.mstep==='build'?missionBuild():state.mstep==='flight'?missionFlight():state.mstep==='running'?missionRunning():missionResult(),post:()=>state.postStage<0?recommendedPostIntro():recommendedJourney(),join:joinPage,display:displayPage};
  document.body.classList.toggle('experience-mode',state.page==='post'||(state.page==='mission'&&state.course==='guided'));
+ document.body.classList.toggle('post-flow-mode',state.page==='post'&&state.postStage>=0);
  main.innerHTML=renderers[state.page]();
  document.querySelectorAll('.nav [data-go]').forEach(el=>{const active=el.dataset.go===state.page;if(active)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});
  document.title=({home:'ORBIT LAB',mission:'衛星ミッションメーカー',post:'お願いごとの旅',join:'関わり方',display:'展示モード'}[state.page])+' | リーマンサット 体験デモ';
@@ -212,8 +213,7 @@ function action(name){switch(name){
  case 'retry-operation':state.mstep='flight';render();break;
  case 'edit-parts':state.mstep='build';render();break;
  case 'start-journey':cancelExperience();state.postStage=0;state.quizAnswer=null;state.postRecorded=false;render();break;
- case 'journey-back':advanceJourney(true);break;
- case 'journey-next':advanceJourney();break;
+ case 'select-wish':cancelExperience();state.postStage=-1;state.postRecorded=false;render('wish-'+state.wishIndex);break;
  case 'fullscreen':fullscreen();break;
  case 'reset-counts':state.counts={satellites:0,journeys:0};render();toast('この端末の体験回数をリセットしました。');break;
 }}
@@ -234,7 +234,7 @@ window.addEventListener('hashchange',()=>{const route=location.hash.slice(1);if(
 document.getElementById('about-button').addEventListener('click',()=>document.getElementById('about-dialog').showModal());
 document.getElementById('close-about').addEventListener('click',()=>document.getElementById('about-dialog').close());
 document.getElementById('about-dialog').addEventListener('click',e=>{if(e.target===e.currentTarget){const r=e.currentTarget.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.currentTarget.close();}});
-document.getElementById('motion-toggle').addEventListener('click',e=>{state.reduceMotion=!state.reduceMotion;document.body.classList.toggle('reduce-motion',state.reduceMotion);e.currentTarget.setAttribute('aria-pressed',String(state.reduceMotion));e.currentTarget.textContent=state.reduceMotion?'オン':'オフ';if(state.reduceMotion){if(photoMission.phase==='attaching'||photoMission.phase==='sending'){if(experienceTimer!==null)clearTimeout(experienceTimer);experienceTimer=null;experienceGeneration++;finishPhotoMotion();}else if(postMotion){cancelExperience();render();}}});
+document.getElementById('motion-toggle').addEventListener('click',e=>{state.reduceMotion=!state.reduceMotion;document.body.classList.toggle('reduce-motion',state.reduceMotion);e.currentTarget.setAttribute('aria-pressed',String(state.reduceMotion));e.currentTarget.textContent=state.reduceMotion?'オン':'オフ';if(state.reduceMotion){if(photoMission.phase==='attaching'||photoMission.phase==='sending'){if(experienceTimer!==null)clearTimeout(experienceTimer);experienceTimer=null;experienceGeneration++;finishPhotoMotion();}}syncPostMotion();});
 window.addEventListener('pagehide',()=>{clearFlight();cancelExperience();if(state.mstep==='running')state.mstep='flight';});
 window.addEventListener('pageshow',e=>{if(e.persisted)render();});
 go(routes.includes(location.hash.slice(1))?location.hash.slice(1):'home',false);

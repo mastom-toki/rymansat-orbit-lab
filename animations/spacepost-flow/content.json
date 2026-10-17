@@ -1,0 +1,80 @@
+{
+  "title": "宇宙ポストの旅",
+  "size": "1080x1440",
+  "wish": [
+    "宇宙を",
+    "見てみたい"
+  ],
+  "scenes": [
+    {
+      "id": "write",
+      "dur": 2.5,
+      "preview": 1.8,
+      "title": "お願いごとを書く",
+      "caption": "例文の短冊です"
+    },
+    {
+      "id": "photo",
+      "dur": 3,
+      "preview": 2.3,
+      "title": "写真にする",
+      "caption": "紙はそのまま。写真ができた！"
+    },
+    {
+      "id": "save",
+      "dur": 2.5,
+      "preview": 1.9,
+      "title": "SDカードに入れる",
+      "caption": "入れるのは、写真の画像"
+    },
+    {
+      "id": "load",
+      "dur": 2.5,
+      "preview": 1.9,
+      "title": "衛星にのせる",
+      "caption": "SDカードが、衛星の中へ"
+    },
+    {
+      "id": "launch",
+      "dur": 3,
+      "preview": 2.2,
+      "title": "ロケットで宇宙へ",
+      "caption": "写真も、衛星といっしょ！"
+    },
+    {
+      "id": "deploy",
+      "dur": 2.5,
+      "preview": 2,
+      "title": "衛星がとび出す",
+      "caption": "宇宙でロケットからはなれる"
+    },
+    {
+      "id": "orbit",
+      "dur": 4,
+      "preview": 2.2,
+      "title": "地球をぐるぐる",
+      "caption": "写真をのせたまま、地球を回る"
+    },
+    {
+      "id": "reentry",
+      "dur": 4,
+      "preview": 3.3,
+      "title": "さいごは、流れ星に",
+      "caption": "衛星がもえて、光ります"
+    }
+  ],
+  "wishChoices": [
+    [
+      "地球を宇宙から",
+      "見てみたい。"
+    ],
+    [
+      "だれかの挑戦を",
+      "応援したい。"
+    ],
+    [
+      "新しいことに",
+      "挑戦したい。"
+    ]
+  ]
+}

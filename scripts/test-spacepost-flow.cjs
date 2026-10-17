@@ -1,51 +1,47 @@
 'use strict';
-const fs=require('node:fs');
-const vm=require('node:vm');
-const assert=require('node:assert/strict');
-const path=require('node:path');
-const html=fs.readFileSync(path.join(__dirname,'../animations/spacepost-flow/deck.html'),'utf8');
-const code=html.match(/<script id="flow-model">([\s\S]*?)<\/script>/)[1];
-const sandbox={};vm.createContext(sandbox);vm.runInContext(code,sandbox);
-const {stateAt,SCENES,duration}=sandbox.OrbitFlow;
-assert.equal(duration,40);assert.equal(SCENES.length,8);
-for(let i=0;i<SCENES.length;i++){
- assert.equal(stateAt(SCENES[i].start).step,i);
- if(i)assert.equal(SCENES[i-1].end,SCENES[i].start);
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
+const root=path.resolve(__dirname,'../animations/spacepost-flow'),html=fs.readFileSync(path.join(root,'deck.html'),'utf8');
+const content=JSON.parse(fs.readFileSync(path.join(root,'content.json'),'utf8'));
+const sandbox={Motion:require(path.join(root,'runtime/motion.js')),FAMILY_CONTENT:content};
+vm.createContext(sandbox);vm.runInContext(html.match(/<script id="family-model">([\s\S]*?)<\/script>/)[1],sandbox);
+const {stateAt,timeline,duration}=sandbox.FamilyFlow;
+assert.equal(duration,24);assert.equal(timeline.list.length,8);
+const seen=new Set();
+for(let k=0;k<=720;k++){
+ const s=stateAt(k/30);seen.add(s.scene.id);assert.equal(s.index,timeline.at(k/30).index);
+ if(s.index)assert.equal(s.photoId,'photo-01');
+ for(const obj of[s.photo,s.satellite,s.sd,s.rocket])if(obj){for(const key of['x','y'])assert.ok(Number.isFinite(obj[key]));for(const key of['w','h','alpha','payload','open'])if(key in obj)assert.ok(Number.isFinite(obj[key]));if('alpha'in obj)assert.ok(obj.alpha>=0&&obj.alpha<=1);}
 }
-const initial=stateAt(0);
-for(let n=0;n<=1200;n++){
- const s=stateAt(n/30);
- assert.deepEqual(s.paper,initial.paper,'paper must remain on the ground');
- assert.equal(s.image.id,'image-01');
- assert.equal(s.image.content,s.paper.content);
- for(const o of[s.image,s.sd,s.satellite,s.rocket]){
-  for(const k of['x','y','s','alpha'])assert.ok(Number.isFinite(o[k]),`${s.t}:${k}`);
-  assert.ok(o.alpha>=0&&o.alpha<=1);assert.ok(o.s>0);
- }
- if(s.t>=16){assert.equal(s.image.x,s.satellite.x);assert.equal(s.image.y,s.satellite.y);}
+assert.equal(seen.size,8);
+for(const [i,q] of timeline.list.entries()){
+ assert.equal(stateAt(q.start).index,i);assert.equal(stateAt(q.start+q.preview).index,i);
+ assert.ok(q.preview<q.dur);if(i)assert.equal(q.start,timeline.list[i-1].end);
 }
-assert.equal(stateAt(0).image.alpha,0);
-assert.equal(stateAt(7).image.alpha,1);
-assert.equal(stateAt(SCENES[1].previewAt).image.alpha,1,'photo step preview shows its completed copy');
-assert.equal(stateAt(SCENES[7].previewAt).ended,true,'reduced-motion step preview reaches the final result');
-for(let i=0;i<8;i++)assert.equal(stateAt(SCENES[i].previewAt).step,i);
-assert.notEqual(stateAt(7).image.x,stateAt(12).image.x,'image must move to SD');
-assert.notEqual(stateAt(7).image.s,stateAt(12).image.s,'image must shrink into SD');
-assert.notDeepEqual(stateAt(27).satellite,stateAt(29).satellite,'satellite must orbit');
-assert.equal(stateAt(40).satellite.alpha,0);assert.equal(stateAt(40).ended,true);
-for(const boundary of[17,18,22,26,34]){
- const before=stateAt(boundary-0.00001).satellite,after=stateAt(boundary).satellite;
- assert.ok(Math.hypot(before.x-after.x,before.y-after.y)<1,`position continuity at ${boundary}`);
- assert.ok(Math.abs(before.s-after.s)<.01,`size continuity at ${boundary}`);
+assert.equal(stateAt(1.8).writing,1);
+assert.equal(stateAt(4.8).photo.alpha,1);
+assert.equal(stateAt(7.4).photo.x,760);
+assert.equal(stateAt(9.9).satellite.payload,1);
+assert.equal(stateAt(12.7).rocket.flame,1);
+assert.equal(stateAt(15.6).rocket.alpha,0);
+assert.equal(stateAt(23.3).takeaway,true);assert.equal(stateAt(23.3).satellite.alpha,0);
+assert.notEqual(stateAt(17).satellite.x,stateAt(18).satellite.x,'satellite actually orbits');
+const times=[0,.3,1.8,2.8,4.8,5.8,7.4,8.3,9.9,10.8,12.7,13.8,15.6,16.3,18.2,20.3,21.2,22.3,23.3,24];
+const memo=new Map(times.map(t=>[t,JSON.stringify(stateAt(t))]));for(const t of times.reverse())assert.equal(JSON.stringify(stateAt(t)),memo.get(t));
+for(const [,code] of html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(code);
+assert.ok(html.includes('M.scenes(C.scenes)'));assert.ok(!html.includes('workshop-space.png'),'old single background must not be used');
+console.log('PASS: 8 scene boundaries/results, 721 state samples, same photo identity, finite coordinates, actual orbit, completion, seek order, runtime calls, JS syntax');
+
+const {select}=require(path.join(root,'flow-content.js'));
+const parent=fs.readFileSync(path.join(root,'../../index.html'),'utf8');
+const wishes=JSON.parse(parent.match(/const WISHES=(\[[^;]+\]);/)[1].replaceAll("'",'"'));
+assert.deepEqual(content.wishChoices.map(lines=>lines.join('')),wishes,'each selected example must match its animated card');
+for(let i=0;i<wishes.length;i++){
+ const selected=select(content,new URLSearchParams({wish:String(i)}));
+ assert.equal(selected.wish.join(''),wishes[i]);
+ selected.wish[0]='changed';assert.notEqual(content.wishChoices[i][0],'changed','selection must not mutate the source');
 }
-assert.equal(stateAt(22).satellite.fold,1);
-assert.ok(stateAt(23.5).satellite.fold<1&&stateAt(23.5).satellite.fold>0);
-assert.equal(stateAt(25).satellite.fold,0);
-const times=[0,7,12,16,19,23,29,36,40];
-const records=new Map(times.map(t=>[t,JSON.stringify(stateAt(t))]));
-for(const t of [...times].reverse())assert.equal(JSON.stringify(stateAt(t)),records.get(t),'seek must be order independent');
-assert.equal(stateAt(-1).t,0);assert.equal(stateAt(100).t,40);assert.equal(stateAt(NaN).t,0);
-const scripts=[...html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g)];
-for(const [,s] of scripts)new vm.Script(s);
-assert.ok(!/https?:\/\/[^'"\s]+\.js/.test(html),'no external runtime requests');
-console.log('PASS: 8 scene boundaries, 1201 state samples, paper/image identity, SD transfer, orbit, completion, continuous launch/deployment, seek order, JS syntax');
+for(const bad of ['-1','3','NaN','Infinity','__proto__','<script>alert(1)</script>'])assert.deepEqual(select(content,new URLSearchParams({wish:bad})).wish,content.wish,'only predefined examples may enter the card');
+assert.deepEqual(select(content,new URLSearchParams()).wish,content.wish);
+console.log('PASS: all 3 selected examples, immutable content, invalid/query-text rejection');
+
+require('./test-flow-controls.cjs');
