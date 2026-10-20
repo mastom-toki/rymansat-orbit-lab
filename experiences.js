@@ -118,3 +118,16 @@ document.addEventListener('keydown',e=>{
  if(!e.target.closest('[data-framepad]'))return;
  const moves={ArrowLeft:[-10,0],ArrowRight:[10,0],ArrowUp:[0,-10],ArrowDown:[0,10]};const v=moves[e.key];if(!v)return;e.preventDefault();setFraming(photoMission.frame.x+v[0],photoMission.frame.y+v[1],'矢印キーで構図を変えました。');
 });
+
+// Isolated, browser-local timing game. Messages are limited to the current frame.
+function releaseGame(){return `<section class="release-shell"><h1 tabindex="-1">衛星、うまく飛び出せるかな？</h1><iframe class="release-frame" title="ロケットから衛星を放すタイミングゲーム" src="./games/satellite-release/index.html"></iframe><button class="link-button" data-go="home">ほかの体験へ</button></section>`;}
+function releaseFrame(){return main.querySelector('.release-frame');}
+function releaseMessage(type,extra={}){const frame=releaseFrame();if(frame?.contentWindow)frame.contentWindow.postMessage({channel:'orbit-release',type,...extra},location.origin);}
+function pauseReleaseGame(){releaseMessage('pause');}
+function syncReleaseMotion(){releaseMessage('motion',{reduced:reducedMotion()});}
+window.addEventListener('message',event=>{
+ const frame=releaseFrame();
+ if(state.page!=='release'||!frame||event.source!==frame.contentWindow||event.origin!==location.origin||event.data?.channel!=='orbit-release')return;
+ if(event.data.type==='ready')syncReleaseMotion();
+ if(event.data.type==='height'&&Number.isFinite(event.data.height)&&event.data.height>=200&&event.data.height<=10000)frame.style.height=event.data.height+'px';
+});

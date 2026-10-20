@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+<title>衛星、うまく飛び出せるかな？</title>
+<script src="./core.js" defer></script>
+<script src="./game.js" defer></script>
+</head>
+<body>
+<main class="game" data-phase="ready">
+  <div class="scoreboard"><span>挑戦 <b id="attempt">0</b> 回</span><span>成功 <b id="wins">0</b> 回</span><span>最高 <b id="best">—</b> 点</span></div>
+  <p class="instruction" id="instruction" role="status">しま模様の帯で、衛星を放そう。</p>
+  <div class="scene">
+    <canvas id="space" width="720" height="540" role="img" aria-label="地球から飛び立つロケットと、小さな衛星のゲーム画面"></canvas>
+    <span class="scene-label" id="scene-label">衛星は、ロケットの中。</span>
+    <span class="fiction-label">時間・距離・軌道はゲーム用</span>
+  </div>
+  <div class="timing" id="timing" role="progressbar" aria-label="ロケットの進み具合" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <div class="timing-labels"><span>早い</span><strong id="zone-label">★ この帯で放す</strong><span>遅い</span></div>
+    <div class="track"><div id="zone" class="zone"></div><span id="needle" class="needle">▼</span><span id="mark" class="mark" hidden>◆</span></div>
+    <div class="timing-ends"><span>打ち上げ</span><span>放しそびれ</span></div>
+  </div>
+  <section class="feedback" aria-live="polite" aria-atomic="true"><h2 id="result-title">狙うのは、しま模様の帯。</h2><p id="result-hint">打ち上げたら「衛星を放つ」を1回タップ。</p></section>
+  <div class="actions"><button id="primary" type="button">打ち上げる</button><button id="pause" type="button" disabled>一時停止</button><button id="skip" type="button" hidden>結果へスキップ</button></div>
+  <p id="keyboard-hint" class="small">ボタンは Enter / Space でも操作できます。</p>
+  <div class="options"><label><input type="checkbox" id="slow">ゆっくり飛ばす</label><label><input type="checkbox" id="reduce">動きを少なく</label></div>
+  <p id="motion-note" class="small" hidden>端末・全体の設定で動きを抑えています。計器の針は進みます。</p>
+  <details><summary>ゲームと本当の宇宙は、どう違う？</summary><p>タイミングだけで結果が変わる、創作のゲームです。月にぶつかる・太陽まで飛んでいくのはゲームの演出です。</p><p>実際に地球を回るには、高さだけでなく速さや進む向きも大切です。放すのが遅いだけで、月や太陽へ飛んでいくわけではありません。</p><p>実際の衛星には接続していません。記録はこの画面内だけで、再読み込み・画面移動で消えます。企画検討用の試作・採用未定です。</p><a href="https://www.esa.int/Enabling_Support/Space_Transportation/Types_of_orbits" target="_blank" rel="noopener noreferrer">参考：ESAの軌道の説明</a></details>
+  <noscript>このゲームを遊ぶにはJavaScriptを有効にしてください。</noscript>
+</main>
+</body>
+</html>

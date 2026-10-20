@@ -6,9 +6,9 @@ function player(){
  const frame={contentWindow:{postMessage(data,origin){messages.push({data,origin});}}};
  const state={page:'post',postStage:0,wishIndex:1,postRecorded:false,counts:{journeys:0},reduceMotion:false};
  const main={querySelector(){return frame;}};
- const context={state,main,location:{origin:'https://example.test'},document:{addEventListener(){}},window:{matchMedia(){return {matches:false};},addEventListener(type,fn){handlers[type]=fn;}},OrbitPhoto:require('../experience-core.js')};
+ const context={state,main,location:{origin:'https://example.test'},document:{addEventListener(){}},window:{matchMedia(){return {matches:false};},addEventListener(type,fn){(handlers[type]||=[]).push(fn);}},OrbitPhoto:require('../experience-core.js')};
  vm.createContext(context);vm.runInContext(source,context);
- function send(type,overrides={}){handlers.message({source:frame.contentWindow,origin:context.location.origin,data:{channel:'orbit-spacepost',type},...overrides});}
+ function send(type,overrides={}){handlers.message.forEach(fn=>fn({source:frame.contentWindow,origin:context.location.origin,data:{channel:'orbit-spacepost',type},...overrides}));}
  return {context,frame,state,messages,send};
 }
 let checks=0;function test(name,run){run();checks++;console.log('PASS '+name);}
