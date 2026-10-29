@@ -49,7 +49,7 @@ node scripts/test-experience.cjs
 
 初回公開後の変更はブランチを作り、PRで内容と画面・操作の確認結果を共有してからmainに取り込みます。例: `codex/improve-home`。画面サイズによる確認と実機確認を分けて記録します。メンバー招待は、所有者がアカウントを指定してから行います。
 
-改善案は [docs/ideas.md](docs/ideas.md) にまとめています。Three.js、Remotion、実機連携、API、ログイン、収集用バックエンドは未採用です。
+改善案は [docs/ideas.md](docs/ideas.md) にまとめています。Three.jsは下記の独立した3D試作だけで採用しました。Remotion、実機連携、API、ログイン、収集用バックエンドは未採用です。
 
 ## データ・出典・検証
 
@@ -90,4 +90,24 @@ HTML/CSS/Canvasだけで描画し、画像の追加読み込み・外部ライ�
 node scripts/test-release-game.cjs
 ```
 
-判定境界・フレーム間隔・中断再開・再挑戦・連打・完了・フォーカス・メッセージ照合を確認します。ブラウザ確認と実機未検証事項は[検証記録](docs/verification.md)を参照してください。公開中のmainとは別のレビュー対象です。
+判定境界・フレーム間隔・中断再開・再挑戦・連打・完了・フォーカス・メッセージ照合を確認します。ブラウザ確認と実機未検証事項は[検証記録](docs/verification.md)を参照してください。変更の検証対象commitと公開状況は検証記録に分けて記載します。
+
+## 追加試作：3D写真ミッション
+
+専用ブランチでレビュー中です。mainへマージするまでは公開URLに追加されません。ローカルHTTPで `/#cubesat3d` を開くか、ホームの「3Dの衛星を触る」へ進みます。ES ModulesとWebGL 2を使うため、file URLでの起動には対応しません。
+
+指のドラッグ・矢印ボタン・矢印キーで立体の衛星を回し、カメラを取り付け、衛星の向きで決まった構図をPNGに撮影します。「地上へ送る」で同一画像を受信側に表示し、撮り直しで別の向きを試せます。地球を見失ったら「地球を向く」で戻れます。既存3体験と任意の部品・電力コースは維持しています。
+
+衛星・カメラ・地球は説明用の独自図案です。実機・軌道の再現、端末カメラの使用、実際の通信・受付は行いません。写真は子画面内のメモリに保持し、移動・再読み込みで消えます。動き低減、装着・送信のスキップ、画面移動時の中断に対応します。WebGL表示に失敗した場合は、読み直すか既存の写真体験へ進めます。
+
+Three.js **0.186.1 / MIT** を同梱し、この試作を開いた時だけ読み込みます。配布JSは約2.12MB（非圧縮）。ビルド・npm install・CDN・外部APIは不要です。ライセンスと配布物ハッシュは [vendor/three/provenance.json](vendor/three/provenance.json) と [LICENSE](vendor/three/LICENSE) にあります。待機中は連続描画を止め、離脱時はGPUリソースを解放します。スマホ実機の読込時間・発熱・Safari対応は未検証です。
+
+```powershell
+node scripts/test-cubesat-3d.cjs
+node scripts/test-cubesat-camera.mjs
+node scripts/test-experience.cjs
+node scripts/test-spacepost-flow.cjs
+node scripts/test-release-game.cjs
+```
+
+状態テストでは撮影を模擬し、姿勢計算テストでは同梱のThree.jsを使用します。実描画と同じ画像の受信はブラウザで別に確認します。採用した移管元HTML v0.1およびSites現行版との同一性未確認という記録は変更しません。確認範囲は[検証記録](docs/verification.md)、実機での約3分の確認は[チェックリスト](docs/device-checklist.md)を参照してください。

@@ -131,3 +131,15 @@ window.addEventListener('message',event=>{
  if(event.data.type==='ready')syncReleaseMotion();
  if(event.data.type==='height'&&Number.isFinite(event.data.height)&&event.data.height>=200&&event.data.height<=10000)frame.style.height=event.data.height+'px';
 });
+
+// Separate 3D prototype: only the current same-origin child may report size.
+function cubesat3d(){return `<section class="cube-shell"><h1 tabindex="-1">3Dで、地球の写真を届けよう。</h1><p class="cube-intro">衛星を回す → カメラを付ける → 撮って送る</p><iframe class="cube-frame" title="3Dのキューブサットを回して撮影する試作" src="./prototypes/cubesat-3d/index.html"></iframe><div class="cube-links"><button class="link-button" data-go="mission">いつもの写真体験へ</button><button class="link-button" data-go="home">ホームへ</button></div></section>`;}
+function cubeFrame(){return main.querySelector('.cube-frame');}
+function cubeMessage(type,extra={}){const f=cubeFrame();if(f?.contentWindow)f.contentWindow.postMessage({channel:'orbit-cubesat',type,...extra},location.origin);}
+function pauseCubeMission(){cubeMessage('pause');}
+function syncCubeMotion(){cubeMessage('motion',{reduced:reducedMotion()});}
+window.addEventListener('message',e=>{
+ const f=cubeFrame();if(state.page!=='cubesat3d'||!f||e.source!==f.contentWindow||e.origin!==location.origin||e.data?.channel!=='orbit-cubesat')return;
+ if(e.data.type==='ready')syncCubeMotion();
+ if(e.data.type==='height'&&Number.isFinite(e.data.height)&&e.data.height>=200&&e.data.height<=10000)f.style.height=e.data.height+'px';
+});
