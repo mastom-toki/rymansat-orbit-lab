@@ -57,7 +57,7 @@ node scripts/test-experience.cjs
 
 説明の出典は [宇宙ポスト公式案内](https://www.rymansat.com/spacepost) と [参加案内](https://www.rymansat.com/join) です。図版は説明用の独自図案で、公式ロゴ・実機写真ではありません。展示への採用と説明内容は、今後メンバーで確認します。
 
-移管前HTMLの過去のテスト結果は、今回の公開版の検証結果として転載していません。初回公開と体験改善の検証結果は [docs/verification.md](docs/verification.md) に記録しています。実機iPhone・Android、会場回線、分かりやすさ・面白さは未検証です。
+移管前HTMLの過去のテスト結果は、今回の公開版の検証結果として転載していません。初回公開と体験改善の検証結果は [docs/verification.md](docs/verification.md) に記録しています。OPPO Reno11 A（Android 16 / Brave 1.97.59）ではUSB操作で3Dと既存3体験の動作を確認しました。他のAndroid・iPhone/Safari、会場回線、手持ちでの操作感、分かりやすさ・面白さは未検証です。
 
 ## 宇宙ポスト：24秒・8場面
 
@@ -100,7 +100,7 @@ node scripts/test-release-game.cjs
 
 衛星・カメラ・地球は説明用の独自図案です。実機・軌道の再現、端末カメラの使用、実際の通信・受付は行いません。写真は子画面内のメモリに保持し、移動・再読み込みで消えます。動き低減、装着・送信のスキップ、画面移動時の中断に対応します。WebGL表示に失敗した場合は、読み直すか既存の写真体験へ進めます。
 
-Three.js **0.186.1 / MIT** を同梱し、この試作を開いた時だけ読み込みます。配布JSは約2.12MB（非圧縮）。ビルド・npm install・CDN・外部APIは不要です。ライセンスと配布物ハッシュは [vendor/three/provenance.json](vendor/three/provenance.json) と [LICENSE](vendor/three/LICENSE) にあります。待機中は連続描画を止め、離脱時はGPUリソースを解放します。スマホ実機の読込時間・発熱・Safari対応は未検証です。
+Three.js **0.186.1 / MIT** を同梱し、この試作を開いた時だけ読み込みます。配布JSは約2.12MB（非圧縮）。ビルド・npm install・CDN・外部APIは不要です。ライセンスと配布物ハッシュは [vendor/three/provenance.json](vendor/three/provenance.json) と [LICENSE](vendor/three/LICENSE) にあります。待機中は連続描画を止め、離脱時はGPUリソースを解放します。OPPO Reno11 Aで起動・回転・撮影・受信を確認しました。現在の端末設定（幅320 CSS px・文字倍率1.15）では主要操作に縦スクロールが必要です。読込時間・発熱の定量測定とSafari対応は未検証です。
 
 ```powershell
 node scripts/test-cubesat-3d.cjs
