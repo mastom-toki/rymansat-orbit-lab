@@ -49,7 +49,7 @@ node scripts/test-experience.cjs
 
 初回公開後の変更はブランチを作り、PRで内容と画面・操作の確認結果を共有してからmainに取り込みます。例: `codex/improve-home`。画面サイズによる確認と実機確認を分けて記録します。メンバー招待は、所有者がアカウントを指定してから行います。
 
-改善案は [docs/ideas.md](docs/ideas.md) にまとめています。Three.js、Remotion、実機連携、API、ログイン、収集用バックエンドは未採用です。
+改善案は [docs/ideas.md](docs/ideas.md) にまとめています。Three.jsは下記の独立した3D試作だけで採用しました。Remotion、実機連携、API、ログイン、収集用バックエンドは未採用です。
 
 ## データ・出典・検証
 
@@ -57,7 +57,7 @@ node scripts/test-experience.cjs
 
 説明の出典は [宇宙ポスト公式案内](https://www.rymansat.com/spacepost) と [参加案内](https://www.rymansat.com/join) です。図版は説明用の独自図案で、公式ロゴ・実機写真ではありません。展示への採用と説明内容は、今後メンバーで確認します。
 
-移管前HTMLの過去のテスト結果は、今回の公開版の検証結果として転載していません。初回公開と体験改善の検証結果は [docs/verification.md](docs/verification.md) に記録しています。実機iPhone・Android、会場回線、分かりやすさ・面白さは未検証です。
+移管前HTMLの過去のテスト結果は、今回の公開版の検証結果として転載していません。初回公開と体験改善の検証結果は [docs/verification.md](docs/verification.md) に記録しています。OPPO Reno11 A（Android 16 / Brave 1.97.59）ではUSB操作で3Dと既存3体験の動作を確認しました。他のAndroid・iPhone/Safari、会場回線、手持ちでの操作感、分かりやすさ・面白さは未検証です。
 
 ## 宇宙ポスト：24秒・8場面
 
@@ -90,4 +90,26 @@ HTML/CSS/Canvasだけで描画し、画像の追加読み込み・外部ライ�
 node scripts/test-release-game.cjs
 ```
 
-判定境界・フレーム間隔・中断再開・再挑戦・連打・完了・フォーカス・メッセージ照合を確認します。ブラウザ確認と実機未検証事項は[検証記録](docs/verification.md)を参照してください。公開中のmainとは別のレビュー対象です。
+判定境界・フレーム間隔・中断再開・再挑戦・連打・完了・フォーカス・メッセージ照合を確認します。ブラウザ確認と実機未検証事項は[検証記録](docs/verification.md)を参照してください。変更の検証対象commitと公開状況は検証記録に分けて記載します。
+
+## 追加試作：3D写真ミッション
+
+ホームの「3Dの衛星を触る」、または `/#cubesat3d` から操作できます。mainに取り込まれた版がGitHub Pagesへ反映されます。ローカル確認も同じ入口を使います。ES ModulesとWebGL 2を使うため、file URLでの起動には対応しません。
+
+指のドラッグ・矢印ボタン・矢印キーで立体の衛星を回し、カメラを取り付け、衛星の向きで決まった構図をPNGに撮影します。「地上へ送る」で同一画像を受信側に表示し、撮り直しで別の向きを試せます。地球を見失ったら「地球を向く」で戻れます。既存3体験と任意の部品・電力コースは維持しています。
+
+衛星・カメラ・地球は説明用の独自図案です。実機・軌道の再現、端末カメラの使用、実際の通信・受付は行いません。写真は子画面内のメモリに保持し、移動・再読み込みで消えます。動き低減、装着・送信のスキップ、画面移動時の中断に対応します。WebGL表示に失敗した場合は、読み直すか既存の写真体験へ進めます。
+
+Three.js **0.186.1 / MIT** を同梱し、この試作を開いた時だけ読み込みます。配布JSは約2.12MB（非圧縮）。ビルド・npm install・CDN・外部APIは不要です。ライセンスと配布物ハッシュは [vendor/three/provenance.json](vendor/three/provenance.json) と [LICENSE](vendor/three/LICENSE) にあります。待機中は連続描画を止め、離脱時はGPUリソースを解放します。OPPO Reno11 Aで起動・回転・撮影・受信を確認しました。現在の端末設定（幅320 CSS px・文字倍率1.15）では主要操作に縦スクロールが必要です。読込時間・発熱の定量測定とSafari対応は未検証です。
+
+```powershell
+node scripts/test-cubesat-3d.cjs
+node scripts/test-cubesat-camera.mjs
+node scripts/test-experience.cjs
+node scripts/test-spacepost-flow.cjs
+node scripts/test-release-game.cjs
+```
+
+状態テストでは撮影を模擬し、姿勢計算テストでは同梱のThree.jsを使用します。実描画と同じ画像の受信はブラウザで別に確認します。採用した移管元HTML v0.1およびSites現行版との同一性未確認という記録は変更しません。確認範囲は[検証記録](docs/verification.md)、実機での約3分の確認は[チェックリスト](docs/device-checklist.md)を参照してください。
+
+PR #4の改修前commitと復旧方法は [公開・復旧の記録](docs/release-pr4.md) にあります。

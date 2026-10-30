@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+<title>3Dキューブサット・写真ミッション</title>
+<script src="./core.js" defer></script>
+<script src="./app.js" defer></script>
+</head>
+<body>
+<main id="mission" data-phase="loading">
+ <ol class="steps" aria-label="写真を届けるまで"><li id="step-attach" aria-current="step">1 カメラ</li><li id="step-photo">2 撮影</li><li id="step-ground">3 地上へ</li></ol>
+ <h2 id="task">3Dの衛星を準備しています…</h2>
+ <section class="workspace" aria-label="触れる衛星と衛星カメラ">
+  <div class="model-area"><canvas id="model" tabindex="0" role="img" aria-label="模擬キューブサット。指でドラッグ、または矢印キーで衛星の向きを変えます。"></canvas><span class="model-tag">模擬キューブサット</span><span class="lens-tag" id="lens-tag">外にある部品がカメラ</span><div id="loading">3Dを読み込み中</div></div>
+  <div class="aim-controls" role="group" aria-label="衛星の向き"><button type="button" data-turn="left" aria-label="衛星を左へ回す" disabled>←</button><button type="button" data-turn="right" aria-label="衛星を右へ回す" disabled>→</button><button type="button" data-turn="up" aria-label="衛星を上へ向ける" disabled>↑</button><button type="button" data-turn="down" aria-label="衛星を下へ向ける" disabled>↓</button><button type="button" data-turn="reset" disabled>地球を向く</button></div>
+  <p id="pose" class="pose">指で回す・矢印ボタンでも操作できます。</p>
+  <div class="photo-grid" id="photos"><figure class="camera-view"><figcaption id="photo-caption">衛星カメラの眺め</figcaption><div class="viewfinder"><canvas id="preview" width="640" height="360" role="img" aria-label="衛星の向きで構図が変わる、模擬の地球"></canvas><img id="photo" alt="この衛星の向きで撮影した模擬写真" hidden><div id="no-camera">カメラを付けると<br>地球が見えます</div></div></figure><p class="photo-hint" id="photo-hint">衛星を回すと、<br>撮れる構図も変わります。</p><figure class="ground-view" id="ground-box" hidden><figcaption>地上局で受信</figcaption><div class="viewfinder"><img id="ground" alt="撮影した画像と同じ、地上局で受信した写真" hidden><span id="waiting">受信待ち</span></div></figure><img id="packet" alt="" aria-hidden="true" hidden></div>
+ </section>
+ <p id="status" role="status">準備ができるまでお待ちください。</p>
+ <div class="actions"><button type="button" id="primary" disabled>読み込み中</button><button type="button" id="retake" hidden>撮り直す</button><button type="button" id="skip" hidden>演出をスキップ</button></div>
+ <div id="error" role="alert" hidden><p id="error-message"></p><button type="button" id="reload">3Dを読み直す</button><a href="../../index.html#mission" target="_top">いつもの写真体験へ</a></div>
+ <div class="foot"><label><input id="reduce" type="checkbox">動きを少なく</label><span>撮影・通信は模擬体験</span></div>
+ <details><summary>この試作について</summary><p>企画検討用の試作・採用未定です。実在する衛星の形状・性能・軌道を再現していません。実際の衛星やカメラには接続していません。実際の宇宙ポスト受付ではありません。</p><p>地球も説明用の独自図案です。衛星の向きで決まる模擬カメラの3D描画を画像にし、同じデータを地上側に表示します。地球が見えなくなったら「地球を向く」で戻せます。</p><p>写真はこの画面内だけで扱い、保存・外部送信しません。再読み込みや画面移動で消えます。撮影後は構図を固定し、撮り直しで向きを変えられます。動き低減中も、手動の回転操作は使えます。</p><p>Three.jsのライセンスは<a href="../../vendor/three/LICENSE" target="_blank" rel="noopener">MIT License</a>です。</p></details>
+ <noscript>この試作を触るにはJavaScriptを有効にしてください。</noscript>
+</main>
+</body>
+</html>
