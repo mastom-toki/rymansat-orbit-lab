@@ -94,8 +94,8 @@ $('play').addEventListener('click',()=>{if(clock.state.playing)clock.pause(now()
 $('scrub').addEventListener('input',e=>{focusId=null;scrubbing=true;clock.scrub(Number(e.target.value),now());requestDraw();});
 $('scrub').addEventListener('change',()=>{scrubbing=false;});
 for(const b of document.querySelectorAll('[data-view]'))b.addEventListener('click',()=>{viewMode=b.dataset.view;userYaw=userPitch=0;if(clock.state.mode==='tour')clock.pause(now());requestDraw();});
-canvas.addEventListener('pointerdown',e=>{if(!ready||!e.isPrimary||e.button!==0)return;drag={id:e.pointerId,x:e.clientX,y:e.clientY};canvas.setPointerCapture?.(e.pointerId);handOver();canvas.style.cursor='grabbing';});
-canvas.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;userYaw-=(e.clientX-drag.x)*.4;userPitch+=(e.clientY-drag.y)*.3;userPitch=Math.max(-60,Math.min(60,userPitch));drag.x=e.clientX;drag.y=e.clientY;requestDraw();});
+canvas.addEventListener('pointerdown',e=>{if(!ready||!e.isPrimary||e.button!==0)return;drag={id:e.pointerId,x:e.clientX,y:e.clientY};canvas.setPointerCapture?.(e.pointerId);canvas.style.cursor='grabbing';});
+canvas.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;if(!drag.moved){drag.moved=true;handOver();}userYaw-=(e.clientX-drag.x)*.4;userPitch+=(e.clientY-drag.y)*.3;userPitch=Math.max(-60,Math.min(60,userPitch));drag.x=e.clientX;drag.y=e.clientY;requestDraw();});
 for(const name of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(name,()=>{drag=null;canvas.style.cursor='';});
 canvas.addEventListener('keydown',e=>{
  const turn={ArrowLeft:[-10,0],ArrowRight:[10,0],ArrowUp:[0,8],ArrowDown:[0,-8]}[e.key];

@@ -41,7 +41,7 @@ output{grid-area:clock;font:.8rem Consolas,monospace;color:var(--muted)}
 #status{margin:8px 2px;font-size:.88rem;color:var(--muted);min-height:1.4em}
 #error{background:#fff4f1;border:1px solid var(--accent);border-radius:12px;padding:12px 14px;margin:10px 0}#error p{margin:0 0 8px}#error a{margin-left:12px}
 details{margin:8px 2px;font-size:.84rem;color:var(--muted)}summary{min-height:44px;display:flex;align-items:center;cursor:pointer}
-@media(min-width:900px){
+@media(min-width:780px){
  main{padding:0 6px 10px}.stage{grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);align-items:start}
  .view{height:540px}.panel{gap:10px}
  .transport{grid-template-columns:auto auto auto 1fr auto;grid-template-areas:"prev play next scrub clock"}output{text-align:right;min-width:92px}
