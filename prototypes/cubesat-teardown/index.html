@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+<title>小型衛星を分解する</title>
+<script src="./core.js" defer></script>
+<script src="./app.js" defer></script>
+</head>
+<body>
+<main id="app" data-ready="false" data-mode="tour">
+ <header class="bar"><div><p class="kicker">TEARDOWN / 説明用の模型</p><h2 id="title">小型衛星を、分解してみよう。</h2></div><label class="reduce"><input id="reduce" type="checkbox">動きを少なく</label></header>
+ <section class="stage" aria-label="分解できる小型衛星">
+  <div class="view" id="view">
+   <canvas id="model" tabindex="0" role="img" aria-label="分解できる小型衛星の模型。指でドラッグ、または矢印キーで向きを変えます。Spaceキーで再生と一時停止。"></canvas>
+   <svg id="leader" class="leader" aria-hidden="true"><line id="leader-line" x1="0" y1="0" x2="0" y2="0"/><circle id="leader-dot" r="5"/></svg>
+   <div id="callout" class="callout" hidden><strong id="callout-name"></strong><span id="callout-badge" class="badge">分離中</span></div>
+   <div id="loading" class="loading">3Dを読み込み中</div>
+   <span class="scene-tag" id="scene-tag">スタジオ</span>
+  </div>
+  <aside class="panel" aria-label="部品と計器">
+   <div class="headline" id="headline"><h3 id="label-title">小型衛星の模型</h3><p id="label-text">いまから中身を分解します。</p></div>
+   <ul class="gauges" id="gauges" aria-label="計器（数値は架空）"></ul>
+   <p class="fiction">計器の数値は説明用の架空の値です。</p>
+   <div class="group" role="group" aria-label="部品をえらぶ"><p class="group-title">部品をえらぶ</p><div class="parts" id="parts"></div></div>
+   <div class="group group-views" role="group" aria-label="見る向き"><p class="group-title">見る向き</p><div class="views" id="views"><button type="button" data-view="auto" aria-pressed="true">おまかせ</button><button type="button" data-view="front" aria-pressed="false">正面</button><button type="button" data-view="side" aria-pressed="false">よこ</button><button type="button" data-view="top" aria-pressed="false">うえ</button></div></div>
+  </aside>
+  <div id="pointer" class="pointer" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M5 3l13 8-6 1.5L9 19z" fill="#fff" stroke="#17324d" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+ </section>
+ <div class="transport" role="group" aria-label="再生">
+  <button type="button" id="prev" aria-label="ひとつ前の部品">◀</button>
+  <button type="button" id="play" aria-label="一時停止" aria-pressed="true">❚❚ 一時停止</button>
+  <button type="button" id="next" aria-label="つぎの部品">▶</button>
+  <label class="scrub"><span>時間</span><input id="scrub" type="range" min="0" max="26" step="0.05" value="0" aria-label="時間（秒）"></label>
+  <output id="clock">0.0 / 26 秒</output>
+ </div>
+ <p id="status" role="status">放っておくと自動で再生します。さわると、あなたの操作に切り替わります。</p>
+ <div id="error" role="alert" hidden><p id="error-message"></p><button type="button" id="reload">3Dを読み直す</button><a href="../../index.html#mission" target="_top">いつもの写真体験へ</a></div>
+ <details><summary>この試作について</summary><p>企画検討用の試作・採用未定です。実際の宇宙ポスト受付ではありません。小型衛星の形・部品・数値・軌道は説明用の独自図案で、実在する衛星の性能や構造を再現していません。</p><p>通信・保存・送信は行いません。3D描画は、この画面を開いている間だけ、あなたの端末の中で動きます。</p></details>
+ <noscript>この試作を触るにはJavaScriptを有効にしてください。</noscript>
+</main>
+</body>
+</html>

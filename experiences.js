@@ -143,3 +143,15 @@ window.addEventListener('message',e=>{
  if(e.data.type==='ready')syncCubeMotion();
  if(e.data.type==='height'&&Number.isFinite(e.data.height)&&e.data.height>=200&&e.data.height<=10000)f.style.height=e.data.height+'px';
 });
+
+// Teardown prototype: a second Three.js child, same rules as the 3D photo mission (origin, source, channel, finite height).
+function teardown(){return `<section class="cube-shell"><h1 tabindex="-1">衛星の中身を、分解して見よう。</h1><p class="cube-intro">自動で分解 → 部品をえらぶ → 向きを変える</p><iframe class="teardown-frame" title="小型衛星を分解して中身を見る試作" src="./prototypes/cubesat-teardown/index.html"></iframe><div class="cube-links"><button class="link-button" data-go="cubesat3d">3Dの写真ミッションへ</button><button class="link-button" data-go="home">ホームへ</button></div></section>`;}
+function teardownFrame(){return main.querySelector('.teardown-frame');}
+function teardownMessage(type,extra={}){const f=teardownFrame();if(f?.contentWindow)f.contentWindow.postMessage({channel:'orbit-teardown',type,...extra},location.origin);}
+function pauseTeardown(){teardownMessage('pause');}
+function syncTeardownMotion(){teardownMessage('motion',{reduced:reducedMotion()});}
+window.addEventListener('message',e=>{
+ const f=teardownFrame();if(state.page!=='teardown'||!f||e.source!==f.contentWindow||e.origin!==location.origin||e.data?.channel!=='orbit-teardown')return;
+ if(e.data.type==='ready')syncTeardownMotion();
+ if(e.data.type==='height'&&Number.isFinite(e.data.height)&&e.data.height>=200&&e.data.height<=10000)f.style.height=e.data.height+'px';
+});
